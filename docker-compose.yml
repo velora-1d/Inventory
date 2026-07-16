@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # Laravel Inertia Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: velora-inventory:latest
+    container_name: inventory-app
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    environment:
+      APP_ENV: local
+      APP_DEBUG: 'true'
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: inventory
+      DB_USERNAME: inventory_user
+      DB_PASSWORD: inventory_password
+    depends_on:
+      - db
+    volumes:
+      - ./.env:/var/www/.env
+      - ./storage:/var/www/storage
+
+  # MySQL Database Server
+  db:
+    image: mysql:8.0
+    container_name: inventory-db
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: inventory
+      MYSQL_USER: inventory_user
+      MYSQL_PASSWORD: inventory_password
+      MYSQL_ROOT_PASSWORD: root_password
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
