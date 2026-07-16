@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import PasswordInput from '@/Components/PasswordInput.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
@@ -128,17 +129,20 @@ const roles = ['Admin', 'Staff Gudang', 'Kasir', 'Manager'];
                 <form @submit.prevent="submitPassword" class="space-y-4">
                     <div>
                         <label class="block text-sm font-semibold text-text-primary mb-1.5">Password Saat Ini</label>
-                        <input v-model="passwordForm.current_password" type="password" class="w-full px-3.5 py-2.5 rounded-xl border border-border-warm bg-gray-50 dark:bg-gray-700 text-text-primary focus:outline-none focus:ring-2 focus:ring-orange-400 text-sm" />
+                        <PasswordInput v-model="passwordForm.current_password"
+                            class="w-full px-3.5 py-2.5 rounded-xl border border-border-warm bg-gray-50 dark:bg-gray-700 text-text-primary focus:outline-none focus:ring-2 focus:ring-orange-400 text-sm" />
                         <p v-if="passwordForm.errors.current_password" class="text-xs text-red-500 mt-1">{{ passwordForm.errors.current_password }}</p>
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-text-primary mb-1.5">Password Baru</label>
-                        <input v-model="passwordForm.password" type="password" class="w-full px-3.5 py-2.5 rounded-xl border border-border-warm bg-gray-50 dark:bg-gray-700 text-text-primary focus:outline-none focus:ring-2 focus:ring-orange-400 text-sm" />
+                        <PasswordInput v-model="passwordForm.password"
+                            class="w-full px-3.5 py-2.5 rounded-xl border border-border-warm bg-gray-50 dark:bg-gray-700 text-text-primary focus:outline-none focus:ring-2 focus:ring-orange-400 text-sm" />
                         <p v-if="passwordForm.errors.password" class="text-xs text-red-500 mt-1">{{ passwordForm.errors.password }}</p>
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-text-primary mb-1.5">Konfirmasi Password Baru</label>
-                        <input v-model="passwordForm.password_confirmation" type="password" class="w-full px-3.5 py-2.5 rounded-xl border border-border-warm bg-gray-50 dark:bg-gray-700 text-text-primary focus:outline-none focus:ring-2 focus:ring-orange-400 text-sm" />
+                        <PasswordInput v-model="passwordForm.password_confirmation"
+                            class="w-full px-3.5 py-2.5 rounded-xl border border-border-warm bg-gray-50 dark:bg-gray-700 text-text-primary focus:outline-none focus:ring-2 focus:ring-orange-400 text-sm" />
                     </div>
                     <div class="flex justify-end pt-2">
                         <button type="submit" :disabled="passwordForm.processing" class="px-5 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 font-semibold rounded-xl text-sm hover:opacity-90 transition-all disabled:opacity-50 active:scale-95">
@@ -158,7 +162,8 @@ const roles = ['Admin', 'Staff Gudang', 'Kasir', 'Manager'];
                 <form @submit.prevent="submitPin" class="space-y-4">
                     <div>
                         <label class="block text-sm font-semibold text-text-primary mb-1.5">Password Anda (Konfirmasi Identitas)</label>
-                        <input v-model="pinForm.password" type="password" placeholder="Masukkan password akun" class="w-full px-3.5 py-2.5 rounded-xl border border-border-warm bg-gray-50 dark:bg-gray-700 text-text-primary focus:outline-none focus:ring-2 focus:ring-orange-400 text-sm" />
+                        <PasswordInput v-model="pinForm.password" placeholder="Masukkan password akun"
+                            class="w-full px-3.5 py-2.5 rounded-xl border border-border-warm bg-gray-50 dark:bg-gray-700 text-text-primary focus:outline-none focus:ring-2 focus:ring-orange-400 text-sm" />
                         <p v-if="pinForm.errors.password" class="text-xs text-red-500 mt-1">{{ pinForm.errors.password }}</p>
                     </div>
                     <div>

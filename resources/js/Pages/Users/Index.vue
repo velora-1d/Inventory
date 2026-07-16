@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import PasswordInput from '@/Components/PasswordInput.vue';
 import { Head, router, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
@@ -184,13 +185,15 @@ const initials  = (name: string) => name.split(' ').slice(0, 2).map(w => w[0]).j
                             </div>
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
-                                    <label class="block text-sm font-semibold text-gray-750 dark:text-gray-250 mb-1">Password {{ editing ? '(kosongkan jika tidak diubah)' : '*' }}</label>
-                                    <input v-model="form.password" type="password" :required="!editing" class="w-full px-3 py-2 text-sm rounded-xl border border-gray-250 dark:border-gray-650 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500"/>
+                                    <label class="block text-sm font-semibold text-text-primary mb-1">Password {{ editing ? '(kosongkan jika tidak diubah)' : '*' }}</label>
+                                    <PasswordInput v-model="form.password" :required="!editing"
+                                        class="w-full px-3 py-2 text-sm rounded-xl border border-gray-250 dark:border-gray-650 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500"/>
                                     <p v-if="form.errors.password" class="text-xs text-red-500 mt-1">{{ form.errors.password }}</p>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-semibold text-gray-750 dark:text-gray-250 mb-1">Konfirmasi Password</label>
-                                    <input v-model="form.password_confirmation" type="password" class="w-full px-3 py-2 text-sm rounded-xl border border-gray-250 dark:border-gray-650 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500"/>
+                                    <label class="block text-sm font-semibold text-text-primary mb-1">Konfirmasi Password</label>
+                                    <PasswordInput v-model="form.password_confirmation"
+                                        class="w-full px-3 py-2 text-sm rounded-xl border border-gray-250 dark:border-gray-650 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500"/>
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 gap-3">
