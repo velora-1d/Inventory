@@ -212,20 +212,33 @@ label {
   opacity: 0.65 !important;
 }
 
-/* Sync custom backgrounds with theme variables */
-.bg-white,
-.dark\:bg-slate-900 {
+/* Sync custom backgrounds with theme variables - LIGHT MODE ONLY (no dark: selectors here) */
+.bg-white {
   background-color: var(--color-surface-warm) !important;
 }
 
-.bg-slate-50,
-.dark\:bg-slate-950 {
+.bg-slate-50 {
   background-color: var(--color-bg-warm) !important;
 }
 
-.bg-slate-100,
-.dark\:bg-slate-800 {
+.bg-slate-100 {
   background-color: var(--color-surface-raised) !important;
+}
+
+/* Dark mode background overrides - scoped to .dark */
+.dark .bg-white,
+.dark .bg-slate-900 {
+  background-color: var(--color-surface-warm) !important;
+}
+
+.dark .bg-slate-50,
+.dark .bg-slate-950 {
+  background-color: var(--color-bg-warm) !important;
+}
+
+.dark .bg-slate-100,
+.dark .bg-slate-800 {
+  background-color: var(--color-surface-warm) !important;
 }
 
 /* Sync borders with theme variables */
@@ -280,23 +293,24 @@ tbody tr td {
   vertical-align: middle !important;
 }
 
-/* Map Tailwind Gray Utility Classes to custom CSS variables for uniform color rendering */
-.bg-gray-50,
-.dark\:bg-gray-950 {
+/* Map Tailwind Gray Utility Classes - LIGHT MODE (no dark: selector leak) */
+.bg-gray-50 {
   background-color: var(--color-bg-warm) !important;
 }
 
-.bg-gray-100,
-.dark\:bg-gray-800 {
+.bg-gray-100 {
   background-color: var(--color-surface-raised) !important;
 }
 
-.dark .dark\:bg-gray-800,
-.dark .dark\:bg-slate-800 {
+/* Dark mode gray backgrounds - properly scoped */
+.dark .bg-gray-50,
+.dark .bg-gray-100,
+.dark .bg-gray-800 {
   background-color: var(--color-surface-warm) !important;
 }
 
-.dark .dark\:bg-gray-700 {
+.dark .bg-gray-700,
+.dark .bg-gray-900 {
   background-color: var(--color-surface-raised) !important;
 }
 
@@ -393,33 +407,15 @@ tbody td .rounded-full.bg-sky-100,
   border-color: #3f3f46 !important;
 }
 
-/* Force all colored text classes (blue, orange, amber, indigo, violet, cyan, sky) to use standard primary text color (black) in Light Mode */
-.text-blue-600,
-.text-blue-500,
-.text-orange-600,
-.text-orange-750,
-.text-orange-700,
-.text-orange-850,
-.text-orange-800,
-.text-amber-600,
-.text-amber-700,
-.text-indigo-600,
-.text-indigo-500,
-.text-violet-600,
-.text-violet-500,
-.text-cyan-600,
-.text-cyan-700,
-.text-cyan-500,
-.text-sky-500,
-.text-sky-600 {
+/* Force only truly problematic colored text to use standard primary text in light mode */
+/* Only target standalone text links/labels - NOT buttons or icons */
+a.text-blue-600:not(button):not([class*="bg-"]),
+a.text-indigo-600:not(button):not([class*="bg-"]) {
   color: var(--color-text-primary) !important;
 }
 
-/* Retain correct colors for hover states on actions/buttons if needed, but ensure they don't break the layout. We make link hover slightly lighter charcoal */
 a.text-blue-600:hover,
-a.text-indigo-600:hover,
-.text-blue-600:hover,
-.text-indigo-600:hover {
+a.text-indigo-600:hover {
   color: #3e3a35 !important;
 }
 
