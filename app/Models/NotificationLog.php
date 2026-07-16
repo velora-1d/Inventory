@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class NotificationLog extends Model
+{
+    public $timestamps = false;
+
+    protected $fillable = [
+        'product_id',
+        'warehouse_id',
+        'notification_type',
+        'channel',
+        'recipient_id',
+        'sent_at'
+    ];
+
+    protected $casts = [
+        'sent_at' => 'datetime',
+    ];
+
+    /**
+     * Get the product.
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    /**
+     * Get the warehouse.
+     */
+    public function warehouse(): BelongsTo
+    {
+        return $this->belongsTo(Warehouse::class);
+    }
+}
