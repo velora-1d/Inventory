@@ -104,35 +104,38 @@ const triggerExport = (format: 'excel' | 'docs' | 'pdf') => {
             <!-- Summary Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <!-- Critical: stock = 0 -->
-                <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-2xl p-5">
+                <div class="bg-surface-warm dark:bg-gray-800 border border-gray-150 dark:border-gray-700 rounded-2xl p-5 shadow-sm relative overflow-hidden">
+                    <div class="absolute top-0 left-0 right-0 h-1 bg-red-500"></div>
                     <div class="flex items-center gap-3 mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-red-100 dark:bg-red-900/50 flex items-center justify-center">
+                        <div class="w-10 h-10 rounded-xl bg-red-50 dark:bg-red-950/30 flex items-center justify-center">
                             <svg class="w-5 h-5 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.962-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
                         </div>
                         <div>
-                            <p class="text-xs font-semibold text-red-600 dark:text-red-400 uppercase tracking-wider">Kritis (Habis)</p>
+                            <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Kritis (Habis)</p>
                         </div>
                     </div>
-                    <p class="text-4xl font-black text-red-700 dark:text-red-300">{{ summary.critical }}</p>
-                    <p class="text-xs text-red-500 dark:text-red-400 mt-1">Stok = 0, perlu restok segera</p>
+                    <p class="text-4xl font-black text-text-primary">{{ summary.critical }}</p>
+                    <p class="text-xs text-gray-400 mt-1">Stok = 0, perlu restok segera</p>
                 </div>
 
                 <!-- Below minimum -->
-                <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-2xl p-5">
+                <div class="bg-surface-warm dark:bg-gray-800 border border-gray-150 dark:border-gray-700 rounded-2xl p-5 shadow-sm relative overflow-hidden">
+                    <div class="absolute top-0 left-0 right-0 h-1 bg-amber-500"></div>
                     <div class="flex items-center gap-3 mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/50 flex items-center justify-center">
+                        <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/30 flex items-center justify-center">
                             <svg class="w-5 h-5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/></svg>
                         </div>
                         <div>
-                            <p class="text-xs font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wider">Di Bawah Minimum</p>
+                            <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Di Bawah Minimum</p>
                         </div>
                     </div>
-                    <p class="text-4xl font-black text-amber-700 dark:text-amber-300">{{ summary.below_min }}</p>
-                    <p class="text-xs text-amber-500 dark:text-amber-400 mt-1">Stok rendah, segera rencanakan</p>
+                    <p class="text-4xl font-black text-text-primary">{{ summary.below_min }}</p>
+                    <p class="text-xs text-gray-400 mt-1">Stok rendah, segera rencanakan</p>
                 </div>
 
                 <!-- Total -->
-                <div class="bg-surface-warm dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-5">
+                <div class="bg-surface-warm dark:bg-gray-800 border border-gray-150 dark:border-gray-700 rounded-2xl p-5 shadow-sm relative overflow-hidden">
+                    <div class="absolute top-0 left-0 right-0 h-1 bg-gray-400"></div>
                     <div class="flex items-center gap-3 mb-3">
                         <div class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
                             <svg class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
@@ -141,8 +144,8 @@ const triggerExport = (format: 'excel' | 'docs' | 'pdf') => {
                             <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total Item Dipantau</p>
                         </div>
                     </div>
-                    <p class="text-4xl font-black text-gray-800 dark:text-gray-200">{{ summary.total }}</p>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Total produk-gudang terdata</p>
+                    <p class="text-4xl font-black text-text-primary">{{ summary.total }}</p>
+                    <p class="text-xs text-gray-400 mt-1">Total produk-gudang terdata</p>
                 </div>
             </div>
 
