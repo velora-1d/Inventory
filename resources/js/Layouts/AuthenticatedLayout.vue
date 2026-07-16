@@ -305,9 +305,6 @@ const menuGroups = [
                             <DropdownLink :href="route('settings.user')">
                                 Pengaturan Akun
                             </DropdownLink>
-                            <DropdownLink :href="route('profile.edit')">
-                                Profile
-                            </DropdownLink>
                             <DropdownLink :href="route('logout')" method="post" as="button">
                                 Log Out
                             </DropdownLink>
