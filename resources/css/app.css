@@ -324,12 +324,16 @@ tbody td .rounded-full.bg-emerald-100,
 tbody td .rounded-full.bg-rose-100,
 tbody td .rounded-full.bg-orange-100,
 tbody td .rounded-full.bg-zinc-100,
+tbody td .rounded-full.bg-cyan-100,
+tbody td .rounded-full.bg-sky-100,
 .fixed .rounded-full.bg-blue-100,
 .fixed .rounded-full.bg-indigo-100,
 .fixed .rounded-full.bg-amber-100,
 .fixed .rounded-full.bg-emerald-100,
 .fixed .rounded-full.bg-rose-100,
-.fixed .rounded-full.bg-orange-100 {
+.fixed .rounded-full.bg-orange-100,
+.fixed .rounded-full.bg-cyan-100,
+.fixed .rounded-full.bg-sky-100 {
   background-color: var(--color-surface-raised) !important; /* Krem / surface-raised background */
   color: var(--color-text-primary) !important; /* Hitam / text-primary */
   border: 1px solid var(--color-border-warm) !important;
@@ -343,18 +347,22 @@ tbody td .rounded-full.bg-zinc-100,
 .dark tbody td .rounded-full.bg-rose-100,
 .dark tbody td .rounded-full.bg-orange-100,
 .dark tbody td .rounded-full.bg-zinc-100,
+.dark tbody td .rounded-full.bg-cyan-100,
+.dark tbody td .rounded-full.bg-sky-100,
 .dark .fixed .rounded-full.bg-blue-100,
 .dark .fixed .rounded-full.bg-indigo-100,
 .dark .fixed .rounded-full.bg-amber-100,
 .dark .fixed .rounded-full.bg-emerald-100,
 .dark .fixed .rounded-full.bg-rose-100,
-.dark .fixed .rounded-full.bg-orange-100 {
+.dark .fixed .rounded-full.bg-orange-100,
+.dark .fixed .rounded-full.bg-cyan-100,
+.dark .fixed .rounded-full.bg-sky-100 {
   background-color: #27272a !important; /* zinc-800 background in dark mode */
   color: #fafafa !important; /* zinc-50 text in dark mode */
   border-color: #3f3f46 !important;
 }
 
-/* Force all colored text classes (blue, orange, amber, indigo, violet) to use standard primary text color (black) in Light Mode */
+/* Force all colored text classes (blue, orange, amber, indigo, violet, cyan, sky) to use standard primary text color (black) in Light Mode */
 .text-blue-600,
 .text-blue-500,
 .text-orange-600,
@@ -367,7 +375,12 @@ tbody td .rounded-full.bg-zinc-100,
 .text-indigo-600,
 .text-indigo-500,
 .text-violet-600,
-.text-violet-500 {
+.text-violet-500,
+.text-cyan-600,
+.text-cyan-700,
+.text-cyan-500,
+.text-sky-500,
+.text-sky-600 {
   color: var(--color-text-primary) !important;
 }
 
