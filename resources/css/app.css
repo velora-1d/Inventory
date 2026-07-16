@@ -353,3 +353,43 @@ tbody td .rounded-full.bg-zinc-100,
   color: #fafafa !important; /* zinc-50 text in dark mode */
   border-color: #3f3f46 !important;
 }
+
+/* Force all colored text classes (blue, orange, amber, indigo, violet) to use standard primary text color (black) in Light Mode */
+.text-blue-600,
+.text-blue-500,
+.text-orange-600,
+.text-orange-750,
+.text-orange-700,
+.text-orange-850,
+.text-orange-800,
+.text-amber-600,
+.text-amber-700,
+.text-indigo-600,
+.text-indigo-500,
+.text-violet-600,
+.text-violet-500 {
+  color: var(--color-text-primary) !important;
+}
+
+/* Retain correct colors for hover states on actions/buttons if needed, but ensure they don't break the layout. We make link hover slightly lighter charcoal */
+a.text-blue-600:hover,
+a.text-indigo-600:hover,
+.text-blue-600:hover,
+.text-indigo-600:hover {
+  color: #3e3a35 !important;
+}
+
+/* Ensure dark mode still shows correct zinc colors for these overridden classes */
+.dark .text-blue-600,
+.dark .text-blue-500,
+.dark .text-orange-600,
+.dark .text-orange-700,
+.dark .text-orange-800,
+.dark .text-amber-600,
+.dark .text-amber-700,
+.dark .text-indigo-600,
+.dark .text-indigo-500,
+.dark .text-violet-600,
+.dark .text-violet-500 {
+  color: #fafafa !important; /* Zinc-50 */
+}
