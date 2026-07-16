@@ -44,7 +44,38 @@ body {
   background-color: var(--color-bg-warm);
   color: var(--color-text-primary);
   letter-spacing: -0.01em;
-  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Smooth premium transitions for theme switching */
+body, 
+aside, 
+header, 
+nav, 
+main,
+table,
+thead,
+tbody,
+tr,
+td,
+th,
+span,
+input,
+select,
+textarea,
+button,
+div,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a {
+  transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Enforce modern geometric font across all headers and bold components */
