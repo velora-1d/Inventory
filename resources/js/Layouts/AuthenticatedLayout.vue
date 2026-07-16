@@ -302,6 +302,9 @@ const menuGroups = [
                         </template>
 
                         <template #content>
+                            <DropdownLink :href="route('settings.user')">
+                                Pengaturan Akun
+                            </DropdownLink>
                             <DropdownLink :href="route('profile.edit')">
                                 Profile
                             </DropdownLink>

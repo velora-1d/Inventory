@@ -84,6 +84,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Pengaturan User (profil, password, PIN)
+    Route::get('/settings/user', [App\Http\Controllers\UserSettingsController::class, 'index'])->name('settings.user');
+    Route::patch('/settings/user/profile', [App\Http\Controllers\UserSettingsController::class, 'updateProfile'])->name('settings.user.profile');
+    Route::patch('/settings/user/password', [App\Http\Controllers\UserSettingsController::class, 'updatePassword'])->name('settings.user.password');
+    Route::patch('/settings/user/pin', [App\Http\Controllers\UserSettingsController::class, 'updatePin'])->name('settings.user.pin');
+
+    // Role Switch (Admin only)
+    Route::post('/role-switch', [App\Http\Controllers\RoleSwitchController::class, 'switch'])->name('role-switch.switch');
+    Route::post('/role-switch/restore', [App\Http\Controllers\RoleSwitchController::class, 'restore'])->name('role-switch.restore');
 });
 
 require __DIR__.'/auth.php';
