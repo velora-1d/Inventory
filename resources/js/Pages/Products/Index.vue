@@ -337,7 +337,7 @@ const formatNumber = (value: number) => {
                                 <div class="text-xs text-slate-450 mt-0.5 line-clamp-1 max-w-xs">{{ product.description || '-' }}</div>
                             </td>
                             <td class="p-4">
-                                <span class="bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-350 px-2 py-0.5 rounded text-xs font-semibold">
+                                <span class="bg-orange-50 text-orange-700 dark:bg-orange-950/30 dark:text-orange-400 px-2 py-0.5 rounded text-xs font-semibold">
                                     {{ product.category?.name || 'Tanpa Kategori' }}
                                 </span>
                             </td>
