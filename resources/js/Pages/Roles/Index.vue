@@ -179,13 +179,13 @@ const moduleIcon: Record<string, string> = {
                     <!-- Grouped Permission List in Grid -->
                     <div class="grid grid-cols-2 gap-2 mt-4 pt-3.5 border-t border-gray-150/40 dark:border-gray-700/50">
                         <div v-for="(acts, mod) in getGroupedPermissions(r.permissions)" :key="mod" 
-                            class="flex flex-col gap-1 border border-gray-150/40 dark:border-gray-700/30 p-2.5 rounded-xl bg-gray-50/50 dark:bg-gray-900/30">
+                            class="flex flex-col gap-1 border border-border-warm p-2.5 rounded-xl bg-white dark:bg-gray-900/30">
                             <span class="font-bold text-gray-900 dark:text-gray-100 text-xs capitalize truncate">
                                 {{ moduleLabels[mod] ?? mod.replace('_', ' ') }}
                             </span>
                             <div class="flex flex-wrap gap-1">
                                 <span v-for="act in acts" :key="act" 
-                                    class="px-1.5 py-0.5 rounded bg-orange-50 dark:bg-orange-950/20 text-orange-700 dark:text-orange-400 font-bold text-[9px] uppercase tracking-wider">
+                                    class="px-1.5 py-0.5 rounded bg-orange-100 dark:bg-orange-950/30 text-text-primary dark:text-gray-250 font-bold text-[9px] uppercase tracking-wider border border-orange-200/50">
                                     {{ act }}
                                 </span>
                             </div>
