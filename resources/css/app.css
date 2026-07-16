@@ -253,6 +253,38 @@ tbody tr td {
 .dark\:border-gray-600,
 .dark\:border-gray-700 {
   border-color: var(--color-border-warm) !important;
+}/* Print styles for window.print() PDF export */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  aside, 
+  header, 
+  nav, 
+  button, 
+  .no-print,
+  #sidebar,
+  .print-hidden,
+  .flex.justify-end.gap-3,
+  .flex.justify-end.gap-2 {
+    display: none !important;
+  }
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+  .bg-surface-warm,
+  .bg-surface-raised,
+  tr {
+    background-color: transparent !important;
+    color: black !important;
+    border-color: #94a3b8 !important;
+  }
+  th {
+    background-color: #e2e8f0 !important;
+    color: black !important;
+    border-bottom: 2px solid black !important;
+  }
 }
-
-

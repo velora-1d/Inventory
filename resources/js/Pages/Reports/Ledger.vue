@@ -2,6 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { exportToExcel, exportToDocs, exportToPDF } from '@/exportHelper';
 
 interface Product   { id: number; name: string; sku: string; }
 interface Warehouse { id: number; name: string; code: string; }
@@ -29,11 +30,11 @@ const dateTo          = ref(props.filters.date_to ?? '');
 
 const applyFilters = () => {
     router.get(route('reports.ledger'), {
-        product_id:   productFilter.value || undefined,
-        warehouse_id: warehouseFilter.value || undefined,
-        type:         typeFilter.value || undefined,
-        date_from:    dateFrom.value || undefined,
-        date_to:      dateTo.value || undefined,
+        product_id: productFilter.value,
+        warehouse_id: warehouseFilter.value,
+        type: typeFilter.value,
+        date_from: dateFrom.value,
+        date_to: dateTo.value,
     }, { preserveState: true, replace: true });
 };
 
@@ -46,8 +47,8 @@ const resetFilters = () => {
 const typeConfig: Record<string, { label: string; color: string }> = {
     in:           { label: 'Barang Masuk',   color: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300' },
     out:          { label: 'Barang Keluar',  color: 'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300' },
-    transfer_in:  { label: 'Transfer Masuk', color: 'bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300' },
-    transfer_out: { label: 'Transfer Keluar',color: 'bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300' },
+    transfer_in:  { label: 'Transfer Masuk', color: 'bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300' },
+    transfer_out: { label: 'Transfer Keluar',color: 'bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300' },
     adjustment:   { label: 'Penyesuaian',    color: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-300' },
     return_in:    { label: 'Retur Masuk',    color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300' },
     return_out:   { label: 'Retur Keluar',   color: 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300' },
@@ -55,34 +56,73 @@ const typeConfig: Record<string, { label: string; color: string }> = {
 const getType = (t: string) => typeConfig[t] ?? { label: t, color: 'bg-gray-100 text-gray-600' };
 const formatNumber = (n: number) => new Intl.NumberFormat('id-ID').format(n ?? 0);
 const formatDate   = (d: string) => new Date(d).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+
+const triggerExport = (format: 'excel' | 'docs' | 'pdf') => {
+    if (format === 'pdf') {
+        exportToPDF();
+        return;
+    }
+    const headers = ['Tanggal', 'Produk', 'Gudang', 'Tipe', 'Qty Masuk', 'Qty Keluar', 'Saldo', 'Keterangan'];
+    const rows = props.ledgers.data.map(l => [
+        formatDate(l.transaction_date),
+        `${l.product?.sku} - ${l.product?.name}`,
+        l.warehouse?.name || 'Semua Gudang',
+        getType(l.transaction_type).label,
+        l.qty_in,
+        l.qty_out,
+        l.balance,
+        l.notes || '-'
+    ]);
+    if (format === 'excel') {
+        exportToExcel('Laporan Buku Besar Stok', headers, rows, 'Buku_Besar_Stok');
+    } else {
+        exportToDocs('Laporan Buku Besar Stok', headers, rows, 'Buku_Besar_Stok');
+    }
+};
 </script>
 
 <template>
     <Head title="Buku Besar Stok" />
     <AuthenticatedLayout>
         <template #header>
-            <div>
-                <h2 class="text-xl font-bold text-gray-900 dark:text-white">Buku Besar Stok</h2>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">Riwayat seluruh mutasi stok secara kronologis</p>
+            <div class="flex items-center justify-between w-full">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">Buku Besar Stok</h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">Riwayat seluruh mutasi stok secara kronologis</p>
+                </div>
+                <div class="flex items-center gap-2 print-hidden">
+                    <button @click="triggerExport('excel')" class="px-3.5 py-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl transition-all shadow-sm active:scale-95 duration-100 flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        Excel
+                    </button>
+                    <button @click="triggerExport('docs')" class="px-3.5 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all shadow-sm active:scale-95 duration-100 flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        Word
+                    </button>
+                    <button @click="triggerExport('pdf')" class="px-3.5 py-2 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl transition-all shadow-sm active:scale-95 duration-100 flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                        PDF
+                    </button>
+                </div>
             </div>
         </template>
 
         <div class="py-6 px-4 sm:px-6 lg:px-8 space-y-5">
             <!-- Filters -->
-            <div class="bg-surface-warm dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-4">
+            <div class="bg-surface-warm dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 print-hidden">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
                     <select v-model="productFilter" @change="applyFilters"
-                        class="px-3 py-2 text-sm rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        class="px-3 py-2 text-sm rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500">
                         <option value="">Semua Produk</option>
                         <option v-for="p in products" :key="p.id" :value="p.id">{{ p.sku }} — {{ p.name }}</option>
                     </select>
                     <select v-model="warehouseFilter" @change="applyFilters"
-                        class="px-3 py-2 text-sm rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        class="px-3 py-2 text-sm rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500">
                         <option value="">Semua Gudang</option>
                         <option v-for="w in warehouses" :key="w.id" :value="w.id">{{ w.name }}</option>
                     </select>
                     <select v-model="typeFilter" @change="applyFilters"
-                        class="px-3 py-2 text-sm rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        class="px-3 py-2 text-sm rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500">
                         <option value="">Semua Tipe</option>
                         <option value="in">Barang Masuk</option>
                         <option value="out">Barang Keluar</option>
@@ -92,8 +132,8 @@ const formatDate   = (d: string) => new Date(d).toLocaleDateString('id-ID', { da
                         <option value="return_in">Retur Masuk</option>
                         <option value="return_out">Retur Keluar</option>
                     </select>
-                    <input v-model="dateFrom" @change="applyFilters" type="date" class=" px-3 py-2 text-sm rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
-                    <input v-model="dateTo"   @change="applyFilters" type="date" class=" px-3 py-2 text-sm rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
+                    <input v-model="dateFrom" @change="applyFilters" type="date" class=" px-3 py-2 text-sm rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500"/>
+                    <input v-model="dateTo"   @change="applyFilters" type="date" class=" px-3 py-2 text-sm rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500"/>
                     <button @click="resetFilters" class="px-3 py-2 text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-xl transition-colors">Reset Filter</button>
                 </div>
             </div>
@@ -129,7 +169,7 @@ const formatDate   = (d: string) => new Date(d).toLocaleDateString('id-ID', { da
                                     <p class="text-xs mt-1">Buat transaksi terlebih dahulu</p>
                                 </td>
                             </tr>
-                            <tr v-for="l in ledgers.data" :key="l.id" class="hover:bg-indigo-50/30 dark:hover:bg-indigo-900/10 transition-colors duration-100">
+                            <tr v-for="l in ledgers.data" :key="l.id" class="hover:bg-orange-50/10 dark:hover:bg-orange-950/5 transition-colors duration-100">
                                 <td class="px-4 py-3 text-gray-600 dark:text-gray-300 whitespace-nowrap">{{ formatDate(l.transaction_date) }}</td>
                                 <td class="px-4 py-3">
                                     <p class="font-medium text-gray-800 dark:text-gray-200">{{ l.product?.name }}</p>
@@ -159,12 +199,12 @@ const formatDate   = (d: string) => new Date(d).toLocaleDateString('id-ID', { da
                     </table>
                 </div>
                 <!-- Pagination -->
-                <div v-if="ledgers.last_page > 1" class="px-4 py-3 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
+                <div v-if="ledgers.last_page > 1" class="px-4 py-3 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between print-hidden">
                     <p class="text-xs text-gray-500 dark:text-gray-400">Menampilkan {{ ledgers.data.length }} dari {{ ledgers.total }} records</p>
                     <div class="flex gap-1 flex-wrap">
                         <button v-for="link in ledgers.links" :key="link.label" :disabled="!link.url"
                             @click="link.url && router.get(link.url)" v-html="link.label"
-                            :class="['px-3 py-1 text-xs rounded-lg border transition-colors', link.active ? 'bg-indigo-600 border-indigo-600 text-white' : 'border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-40 disabled:cursor-not-allowed']"/>
+                            :class="['px-3 py-1 text-xs rounded-lg border transition-colors', link.active ? 'bg-orange-600 border-orange-600 text-white' : 'border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-40 disabled:cursor-not-allowed']"/>
                     </div>
                 </div>
             </div>
