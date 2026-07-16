@@ -10,15 +10,15 @@
   --color-primary-foreground: #ffffff;
   
   --color-accent: #f3eedf; /* soft sandy cream */
-  --color-neutral-meta: #8a8576; /* warm medium taupe */
+  --color-neutral-meta: #1c1b19; /* warm black */
   
   --color-bg-warm: #faf6eb; /* elegant cream page background */
-  --color-surface-warm: #ffffff; /* pure container background */
-  --color-surface-raised: #f3eedf; /* selected states and row hover */
+  --color-surface-warm: #faf6eb; /* unified cream container background */
+  --color-surface-raised: #e6dfcf; /* selected states and row hover */
   
   --color-text-primary: #1c1b19; /* warm charcoal */
-  --color-text-secondary: #6e6a5f; /* warm olive-gray */
-  --color-border-warm: #e6dfcf; /* soft warm golden-gray border */
+  --color-text-secondary: #1c1b19; /* make secondary text black for max legibility */
+  --color-border-warm: #cbd5e1; /* slate border for high contrast */
 }
 
 /* Dynamic CSS Variables override on dark class */
