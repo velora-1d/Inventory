@@ -16,6 +16,9 @@ RUN apk add --no-cache \
     supervisor \
     curl \
     libpng-dev \
+    libwebp-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
     libxml2-dev \
     libzip-dev \
     zip \
@@ -24,8 +27,9 @@ RUN apk add --no-cache \
     git \
     shadow
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+# Configure and Install PHP extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
 # Configure Nginx & Supervisor
 COPY docker/nginx.conf /etc/nginx/nginx.conf
