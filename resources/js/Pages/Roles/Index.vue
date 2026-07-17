@@ -243,7 +243,7 @@ const moduleIcon: Record<string, string> = {
                                                 <td v-for="act in matrixActions" :key="act.key" class="p-3.5 text-center">
                                                     <template v-if="getPermByAction(perms, act.key)">
                                                         <label class="inline-flex items-center justify-center cursor-pointer">
-                                                            <input type="checkbox" :checked="form.permissions.includes(getPermByAction(perms, act.key).name)" @change="togglePermission(getPermByAction(perms, act.key).name)"
+                                                            <input type="checkbox" :checked="form.permissions.includes(getPermByAction(perms, act.key)!.name)" @change="togglePermission(getPermByAction(perms, act.key)!.name)"
                                                                 class="w-4.5 h-4.5 rounded text-orange-600 border-gray-300 dark:border-gray-600 focus:ring-orange-500 cursor-pointer transition-all duration-100"/>
                                                         </label>
                                                     </template>
