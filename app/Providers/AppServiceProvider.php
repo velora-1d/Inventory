@@ -23,6 +23,11 @@ class AppServiceProvider extends ServiceProvider
     {
         Vite::prefetch(concurrency: 3);
 
+        // Force HTTPS in production
+        if ($this->app->environment('production') || env('APP_ENV') === 'production') {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
+
         // super-admin bypasses all permission gates
         Gate::before(function ($user, $ability) {
             if ($user->hasRole('super-admin')) {
