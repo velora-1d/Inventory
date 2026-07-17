@@ -164,11 +164,19 @@ class StockInController extends Controller
             foreach ($stockIn->items as $item) {
                 $product = $item->product;
 
-                // 1. Update or create stock record
-                $stock = Stock::firstOrCreate(
-                    ['product_id' => $item->product_id, 'warehouse_id' => $stockIn->warehouse_id],
-                    ['qty' => 0]
-                );
+                // 1. Update or create stock record with row locking
+                $stock = Stock::where('product_id', $item->product_id)
+                    ->where('warehouse_id', $stockIn->warehouse_id)
+                    ->lockForUpdate()
+                    ->first();
+
+                if (!$stock) {
+                    $stock = Stock::create([
+                        'product_id' => $item->product_id,
+                        'warehouse_id' => $stockIn->warehouse_id,
+                        'qty' => 0
+                    ]);
+                }
 
                 $oldQty = $stock->qty;
                 $addQty = $item->qty_base_unit;

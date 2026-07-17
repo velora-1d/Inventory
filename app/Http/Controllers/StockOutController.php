@@ -152,6 +152,7 @@ class StockOutController extends Controller
             foreach ($stockOut->items as $item) {
                 $stock = Stock::where('product_id', $item->product_id)
                     ->where('warehouse_id', $stockOut->warehouse_id)
+                    ->lockForUpdate()
                     ->first();
 
                 $stock->qty -= $item->qty_base_unit;
