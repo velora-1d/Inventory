@@ -55,6 +55,10 @@ RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 # Create runtime directories
 RUN mkdir -p /var/run/nginx /var/log/supervisor
 
+# Copy and set entrypoint script
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 EXPOSE 80
 
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
