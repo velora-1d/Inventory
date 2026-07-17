@@ -35,6 +35,8 @@ const toggleDark = () => {
 
 initTheme();
 
+const currentYear = new Date().getFullYear();
+
 const submit = () => {
     form.post(route('login'), {
         onFinish: () => form.reset('password'),
@@ -65,51 +67,51 @@ const submit = () => {
             <!-- Content -->
             <div class="relative z-10 flex flex-col h-full px-14 py-12">
                 <!-- Logo -->
-                <div class="flex items-center gap-3">
-                    <div class="h-14 w-14 rounded-2xl bg-[#c8a96e] flex items-center justify-center shadow-lg">
-                        <svg class="w-7 h-7 text-[#1a1814]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="flex items-center gap-4">
+                    <div class="h-[4.5rem] w-[4.5rem] rounded-2xl bg-[#c8a96e] flex items-center justify-center shadow-xl">
+                        <svg class="w-9 h-9 text-[#1a1814]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                 d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
                         </svg>
                     </div>
-                    <span class="text-white font-bold text-2xl tracking-tight">INVENTORY</span>
+                    <span class="text-white font-bold text-3xl tracking-tight">INVENTORY</span>
                 </div>
 
                 <!-- Hero -->
                 <div class="flex-1 flex flex-col justify-center max-w-md">
                     <!-- Pill badge -->
-                    <div class="inline-flex items-center gap-2 border border-white/10 bg-white/5 rounded-full px-4 py-2 mb-9 w-fit">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                        <span class="text-sm font-medium text-white/60 tracking-wide">Sistem Real-time Aktif</span>
+                    <div class="inline-flex items-center gap-2.5 border border-white/10 bg-white/5 rounded-full px-5 py-2.5 mb-10 w-fit">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span class="text-base font-medium text-white/60 tracking-wide">Sistem Real-time Aktif</span>
                     </div>
 
-                    <h1 class="text-5xl font-extrabold text-white leading-tight tracking-tight mb-5">
+                    <h1 class="text-6xl font-extrabold text-white leading-tight tracking-tight mb-6">
                         Kelola Stok<br/>
                         <span style="color: #c8a96e;">Lebih Cerdas</span>
                     </h1>
 
-                    <p class="text-white/45 text-base leading-relaxed mb-12">
+                    <p class="text-white/45 text-lg leading-relaxed mb-14">
                         Platform manajemen inventaris dan gudang yang terintegrasi. Pantau stok, lacak mutasi, dan generate laporan dalam satu sistem.
                     </p>
 
                     <!-- Feature pills -->
-                    <div class="space-y-4">
+                    <div class="space-y-5">
                         <div v-for="(feat, i) in [
                             { icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z', label: 'Dashboard analitik real-time' },
                             { icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4', label: 'Manajemen stok multi-gudang' },
                             { icon: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9', label: 'Notifikasi stok menipis otomatis' },
-                        ]" :key="i" class="flex items-center gap-4">
-                            <div class="flex-shrink-0 w-11 h-11 rounded-xl bg-white/8 border border-white/10 flex items-center justify-center">
-                                <svg class="w-5 h-5" style="color: #c8a96e;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        ]" :key="i" class="flex items-center gap-5">
+                            <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-white/8 border border-white/10 flex items-center justify-center">
+                                <svg class="w-6 h-6" style="color: #c8a96e;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="feat.icon"/>
                                 </svg>
                             </div>
-                            <span class="text-white/60 text-base">{{ feat.label }}</span>
+                            <span class="text-white/60 text-lg">{{ feat.label }}</span>
                         </div>
                     </div>
                 </div>
 
-                <p class="text-white/20 text-xs">© 2025 Inventory System. All rights reserved.</p>
+                <p class="text-white/20 text-xs">© {{ currentYear }} Inventory System. All rights reserved.</p>
             </div>
         </div>
 
