@@ -4,6 +4,9 @@ import { Head, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import { exportToExcel, exportToDocs, exportToPDF } from '@/exportHelper';
 
+defineOptions({ layout: AuthenticatedLayout });
+
+
 interface Product   { id: number; name: string; sku: string; }
 interface Warehouse { id: number; name: string; code: string; }
 interface Unit      { id: number; name: string; symbol: string; }
@@ -83,8 +86,6 @@ const triggerExport = (format: 'excel' | 'docs' | 'pdf') => {
 
 <template>
     <Head title="Buku Besar Stok" />
-    <AuthenticatedLayout>
-        <template #header>
             <div class="flex items-center justify-between w-full">
                 <div>
                     <h2 class="text-xl font-bold text-gray-900 dark:text-white">Buku Besar Stok</h2>
@@ -105,7 +106,6 @@ const triggerExport = (format: 'excel' | 'docs' | 'pdf') => {
                     </button>
                 </div>
             </div>
-        </template>
 
         <div class="py-6 px-4 sm:px-6 lg:px-8 space-y-5">
             <!-- Filters -->
@@ -209,5 +209,4 @@ const triggerExport = (format: 'excel' | 'docs' | 'pdf') => {
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
 </template>

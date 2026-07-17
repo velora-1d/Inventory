@@ -3,6 +3,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router, useForm } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 
+defineOptions({ layout: AuthenticatedLayout });
+
+
 interface Permission { id: number; name: string; }
 interface Role { id: number; name: string; users_count: number; permissions: Permission[]; }
 
@@ -136,8 +139,6 @@ const moduleIcon: Record<string, string> = {
 
 <template>
     <Head title="Manajemen Role" />
-    <AuthenticatedLayout>
-        <template #header>
             <div class="flex items-center justify-between w-full">
                 <div>
                     <h2 class="text-xl font-bold text-gray-900 dark:text-white">Manajemen Role & Izin</h2>
@@ -149,7 +150,6 @@ const moduleIcon: Record<string, string> = {
                     Tambah Role
                 </button>
             </div>
-        </template>
 
         <div class="py-6 px-4 sm:px-6 lg:px-8 space-y-4">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -286,5 +286,4 @@ const moduleIcon: Record<string, string> = {
                 </div>
             </Transition>
         </Teleport>
-    </AuthenticatedLayout>
 </template>

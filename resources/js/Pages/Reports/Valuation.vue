@@ -4,6 +4,9 @@ import { Head, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import { exportToExcel, exportToDocs, exportToPDF } from '@/exportHelper';
 
+defineOptions({ layout: AuthenticatedLayout });
+
+
 interface Warehouse { id: number; name: string; code: string; }
 interface Category  { id: number; name: string; }
 interface StockRow {
@@ -64,8 +67,6 @@ const triggerExport = (format: 'excel' | 'docs' | 'pdf') => {
 
 <template>
     <Head title="Valuasi Stok" />
-    <AuthenticatedLayout>
-        <template #header>
             <div class="flex items-center justify-between w-full">
                 <div>
                     <h2 class="text-xl font-bold text-gray-900 dark:text-white">Valuasi Stok</h2>
@@ -86,7 +87,6 @@ const triggerExport = (format: 'excel' | 'docs' | 'pdf') => {
                     </button>
                 </div>
             </div>
-        </template>
 
         <div class="py-6 px-4 sm:px-6 lg:px-8 space-y-5">
             <!-- Total Value Hero Card -->
@@ -185,5 +185,4 @@ const triggerExport = (format: 'excel' | 'docs' | 'pdf') => {
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
 </template>

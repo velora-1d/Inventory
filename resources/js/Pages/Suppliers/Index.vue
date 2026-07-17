@@ -4,6 +4,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, useForm, router, Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
+defineOptions({ layout: AuthenticatedLayout });
+
+
 interface Supplier {
     id: number;
     code: string;
@@ -125,9 +128,6 @@ const deleteSupplier = async (id: number) => {
 
 <template>
     <Head title="Supplier" />
-
-    <AuthenticatedLayout>
-        <template #header>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-slate-800 dark:text-slate-100">
@@ -148,7 +148,6 @@ const deleteSupplier = async (id: number) => {
                     Tambah Supplier
                 </button>
             </div>
-        </template>
 
         <!-- Filters Section -->
         <div class="bg-surface-warm dark:bg-surface-warm p-4 rounded-2xl border border-border-warm dark:border-border-warm shadow-sm mb-6 flex flex-col md:flex-row md:items-center gap-4">
@@ -446,5 +445,4 @@ const deleteSupplier = async (id: number) => {
                 </form>
             </div>
         </div>
-    </AuthenticatedLayout>
 </template>

@@ -3,6 +3,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { ref, watch, computed } from 'vue';
 
+defineOptions({ layout: AuthenticatedLayout });
+
+
 interface Stat {
     total_sku: number;
     total_value: number;
@@ -168,9 +171,6 @@ const getTransactionLabel = (type: string) => {
 
 <template>
     <Head title="Dashboard" />
-
-    <AuthenticatedLayout>
-        <template #header>
             <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-slate-800 dark:text-slate-100">
@@ -201,7 +201,6 @@ const getTransactionLabel = (type: string) => {
                     Akses Terbatas: <span class="font-bold">{{ warehouses.find(w => w.id === $page.props.auth.user.warehouse_id)?.name }}</span>
                 </div>
             </div>
-        </template>
 
         <!-- Stats Overview Cards Grid -->
         <!-- ═══ KPI CARDS GRID (8 CARDS) ═══ -->
@@ -549,5 +548,4 @@ const getTransactionLabel = (type: string) => {
                 </table>
             </div>
         </div>
-    </AuthenticatedLayout>
 </template>

@@ -4,6 +4,9 @@ import PasswordInput from '@/Components/PasswordInput.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
+defineOptions({ layout: AuthenticatedLayout });
+
+
 const props = defineProps<{
     user: { id: number; name: string; email: string; roles: { name: string }[] };
     isAdmin: boolean;
@@ -76,13 +79,10 @@ const roles = ['Admin', 'Staff Gudang', 'Kasir', 'Manager'];
 
 <template>
     <Head title="Pengaturan Akun" />
-    <AuthenticatedLayout>
-        <template #header>
             <div>
                 <h2 class="text-xl font-bold text-gray-900 dark:text-white">Pengaturan Akun</h2>
                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">Kelola profil, password, dan keamanan akun Anda</p>
             </div>
-        </template>
 
         <div class="py-6 space-y-6">
 
@@ -254,5 +254,4 @@ const roles = ['Admin', 'Staff Gudang', 'Kasir', 'Manager'];
             </div>
 
         </div>
-    </AuthenticatedLayout>
 </template>

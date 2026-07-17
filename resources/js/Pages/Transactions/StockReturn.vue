@@ -4,6 +4,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { ref, computed, reactive } from 'vue';
 
+defineOptions({ layout: AuthenticatedLayout });
+
+
 interface Warehouse { id: number; name: string; code: string; }
 interface Supplier  { id: number; name: string; code: string; }
 interface Unit      { id: number; name: string; symbol: string; }
@@ -203,8 +206,6 @@ const typeLabel = (t: string) => t === 'return_in' ? 'Retur Masuk' : 'Retur Kelu
 
 <template>
     <Head title="Retur Barang" />
-    <AuthenticatedLayout>
-        <template #header>
             <div class="flex items-center justify-between">
                 <div>
                     <h2 class="text-xl font-bold text-gray-900 dark:text-white">Retur Barang</h2>
@@ -216,7 +217,6 @@ const typeLabel = (t: string) => t === 'return_in' ? 'Retur Masuk' : 'Retur Kelu
                     Buat Retur
                 </button>
             </div>
-        </template>
 
         <div class="py-6 px-4 sm:px-6 lg:px-8 space-y-5">
             <!-- Filters -->
@@ -553,5 +553,4 @@ const typeLabel = (t: string) => t === 'return_in' ? 'Retur Masuk' : 'Retur Kelu
             </div>
         </div>
         </Transition>
-    </AuthenticatedLayout>
 </template>

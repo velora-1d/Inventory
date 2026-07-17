@@ -4,6 +4,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { ref, computed, reactive, watch } from 'vue';
 
+defineOptions({ layout: AuthenticatedLayout });
+
+
 interface Warehouse { id: number; name: string; code: string; }
 interface Unit      { id: number; name: string; symbol: string; }
 interface Product   { id: number; name: string; sku: string; base_unit_id: number; baseUnit: { name: string; symbol: string } | null; }
@@ -200,8 +203,6 @@ const diffClass = (d: number) => d > 0 ? 'text-emerald-600 dark:text-emerald-400
 
 <template>
     <Head title="Stock Opname" />
-    <AuthenticatedLayout>
-        <template #header>
             <div class="flex items-center justify-between">
                 <div>
                     <h2 class="text-xl font-bold text-gray-900 dark:text-white">Stock Opname</h2>
@@ -213,7 +214,6 @@ const diffClass = (d: number) => d > 0 ? 'text-emerald-600 dark:text-emerald-400
                     Buat Opname
                 </button>
             </div>
-        </template>
 
         <div class="py-6 px-4 sm:px-6 lg:px-8 space-y-5">
             <!-- Filters -->
@@ -490,5 +490,4 @@ const diffClass = (d: number) => d > 0 ? 'text-emerald-600 dark:text-emerald-400
             </div>
         </div>
         </Transition>
-    </AuthenticatedLayout>
 </template>

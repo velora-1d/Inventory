@@ -4,6 +4,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { ref, computed, reactive } from 'vue';
 
+defineOptions({ layout: AuthenticatedLayout });
+
+
 interface Warehouse { id: number; name: string; code: string; }
 interface Unit      { id: number; name: string; symbol: string; }
 interface Product   {
@@ -245,8 +248,6 @@ const statusBadge = (status: string) =>
 
 <template>
     <Head title="Barang Keluar" />
-    <AuthenticatedLayout>
-        <template #header>
             <div class="flex items-center justify-between">
                 <div>
                     <h2 class="text-xl font-bold text-gray-900 dark:text-white">Barang Keluar</h2>
@@ -258,7 +259,6 @@ const statusBadge = (status: string) =>
                     Buat Transaksi
                 </button>
             </div>
-        </template>
 
         <div class="py-6 px-4 sm:px-6 lg:px-8 space-y-5">
 
@@ -628,5 +628,4 @@ const statusBadge = (status: string) =>
             </div>
         </div>
         </Transition>
-    </AuthenticatedLayout>
 </template>

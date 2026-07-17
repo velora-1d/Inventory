@@ -4,6 +4,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, useForm, router, Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
+defineOptions({ layout: AuthenticatedLayout });
+
+
 interface User {
     id: number;
     name: string;
@@ -132,9 +135,6 @@ const deleteWarehouse = async (id: number) => {
 
 <template>
     <Head title="Gudang/Lokasi" />
-
-    <AuthenticatedLayout>
-        <template #header>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight text-slate-800 dark:text-slate-100">
@@ -155,7 +155,6 @@ const deleteWarehouse = async (id: number) => {
                     Tambah Gudang
                 </button>
             </div>
-        </template>
 
         <!-- Filters Section -->
         <div class="bg-surface-warm dark:bg-surface-warm p-4 rounded-2xl border border-border-warm dark:border-border-warm shadow-sm mb-6 flex flex-col md:flex-row md:items-center gap-4">
@@ -420,5 +419,4 @@ const deleteWarehouse = async (id: number) => {
                 </form>
             </div>
         </div>
-    </AuthenticatedLayout>
 </template>

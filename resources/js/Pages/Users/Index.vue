@@ -4,6 +4,9 @@ import PasswordInput from '@/Components/PasswordInput.vue';
 import { Head, router, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
+defineOptions({ layout: AuthenticatedLayout });
+
+
 interface Warehouse { id: number; name: string; }
 interface Role      { id: number; name: string; }
 interface UserItem  { id: number; name: string; email: string; warehouse_id: number | null; warehouse: Warehouse | null; roles: Role[]; created_at: string; email_verified_at: string | null; }
@@ -72,8 +75,6 @@ const initials  = (name: string) => name.split(' ').slice(0, 2).map(w => w[0]).j
 
 <template>
     <Head title="Manajemen User" />
-    <AuthenticatedLayout>
-        <template #header>
             <div class="flex items-center justify-between w-full">
                 <div>
                     <h2 class="text-xl font-bold text-gray-900 dark:text-white">Manajemen User</h2>
@@ -85,7 +86,6 @@ const initials  = (name: string) => name.split(' ').slice(0, 2).map(w => w[0]).j
                     Tambah User
                 </button>
             </div>
-        </template>
 
         <div class="py-6 px-4 sm:px-6 lg:px-8 space-y-5">
             <!-- Filter bar -->
@@ -244,5 +244,4 @@ const initials  = (name: string) => name.split(' ').slice(0, 2).map(w => w[0]).j
                 </div>
             </Transition>
         </Teleport>
-    </AuthenticatedLayout>
 </template>

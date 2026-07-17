@@ -323,12 +323,7 @@ const menuGroups = [
                 </div>
             </header>
 
-            <!-- Page Heading (Dynamic sub-header) -->
-            <div class="bg-surface-warm shadow-sm border-b border-border-warm py-4 px-3 sm:px-4 lg:px-5" v-if="$slots.header">
-                <slot name="header" />
-            </div>
-
-            <!-- Page Content (Dashboard / Inventory Views) -->
+            <!-- Page Content -->
             <main class="flex-1 overflow-y-auto p-3 sm:p-4 lg:p-5 custom-scrollbar">
                 <slot />
             </main>
