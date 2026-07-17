@@ -11,8 +11,15 @@ done
 echo "Database is up! Running migrations..."
 php artisan migrate --force
 
-echo "Running seeders..."
-php artisan db:seed --force
+# Check if users table is empty before seeding
+USER_COUNT=$(php artisan tinker --execute="echo \App\Models\User::count();" 2>/dev/null | grep -E '^[0-9]+$')
+
+if [ -z "$USER_COUNT" ] || [ "$USER_COUNT" -eq 0 ]; then
+  echo "Users table is empty. Running seeders for initial setup..."
+  php artisan db:seed --force
+else
+  echo "Users table already has data. Skipping seeders to prevent data loss."
+fi
 
 echo "Starting Supervisor..."
 exec /usr/bin/supervisord -c /etc/supervisord.conf
