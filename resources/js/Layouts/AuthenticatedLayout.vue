@@ -178,38 +178,37 @@ const menuGroups = [
             </div>
 
             <nav ref="sidebarNav" class="flex-1 overflow-y-auto p-3 space-y-4 custom-scrollbar">
-                <div v-for="group in menuGroups" :key="group.name"
-                    v-if="canSeeGroup(group.items)"
-                    class="space-y-1"
-                >
-                    <span
-                        v-show="isSidebarOpen"
-                        class="px-3 text-xs font-semibold text-text-secondary uppercase tracking-wider block"
-                    >
-                        {{ group.name }}
-                    </span>
-                    <div class="h-px bg-border-warm my-2" v-show="!isSidebarOpen"></div>
-
-                    <Link
-                        v-for="item in group.items"
-                        :key="item.name"
-                        v-if="!item.permission || hasPermission(item.permission)"
-                        :href="route(item.route)"
-                        :class="[
-                            route().current(item.route)
-                                ? 'bg-primary text-primary-foreground font-semibold shadow-sm'
-                                : 'text-text-secondary hover:bg-surface-raised hover:text-text-primary',
-                            'flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-150'
-                        ]"
-                    >
-                        <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="item.icon"></path>
-                        </svg>
-                        <span v-show="isSidebarOpen" class="transition-all duration-300 whitespace-nowrap">
-                            {{ item.name }}
+                <template v-for="group in menuGroups" :key="group.name">
+                    <div v-if="canSeeGroup(group.items)" class="space-y-1">
+                        <span
+                            v-show="isSidebarOpen"
+                            class="px-3 text-xs font-semibold text-text-secondary uppercase tracking-wider block"
+                        >
+                            {{ group.name }}
                         </span>
-                    </Link>
-                </div>
+                        <div class="h-px bg-border-warm my-2" v-show="!isSidebarOpen"></div>
+
+                        <template v-for="item in group.items" :key="item.name">
+                            <Link
+                                v-if="!item.permission || hasPermission(item.permission)"
+                                :href="route(item.route)"
+                                :class="[
+                                    route().current(item.route)
+                                        ? 'bg-primary text-primary-foreground font-semibold shadow-sm'
+                                        : 'text-text-secondary hover:bg-surface-raised hover:text-text-primary',
+                                    'flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-150'
+                                ]"
+                            >
+                                <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="item.icon"></path>
+                                </svg>
+                                <span v-show="isSidebarOpen" class="transition-all duration-300 whitespace-nowrap">
+                                    {{ item.name }}
+                                </span>
+                            </Link>
+                        </template>
+                    </div>
+                </template>
             </nav>
         </aside>
 
@@ -239,32 +238,31 @@ const menuGroups = [
                 </div>
 
                 <nav ref="mobileNav" class="flex-1 h-0 overflow-y-auto px-2 space-y-4">
-                    <div v-for="group in menuGroups" :key="group.name"
-                        v-if="canSeeGroup(group.items)"
-                        class="space-y-1"
-                    >
-                        <span class="px-3 text-xs font-semibold text-text-secondary uppercase tracking-wider block">
-                            {{ group.name }}
-                        </span>
-                        <Link
-                            v-for="item in group.items"
-                            :key="item.name"
-                            v-if="!item.permission || hasPermission(item.permission)"
-                            :href="route(item.route)"
-                            :class="[
-                                route().current(item.route)
-                                    ? 'bg-primary text-primary-foreground font-semibold shadow-sm'
-                                    : 'text-text-secondary hover:bg-surface-raised hover:text-text-primary',
-                                'flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-150'
-                            ]"
-                            @click="toggleMobileSidebar"
-                        >
-                            <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="item.icon"></path>
-                            </svg>
-                            <span>{{ item.name }}</span>
-                        </Link>
-                    </div>
+                    <template v-for="group in menuGroups" :key="group.name">
+                        <div v-if="canSeeGroup(group.items)" class="space-y-1">
+                            <span class="px-3 text-xs font-semibold text-text-secondary uppercase tracking-wider block">
+                                {{ group.name }}
+                            </span>
+                            <template v-for="item in group.items" :key="item.name">
+                                <Link
+                                    v-if="!item.permission || hasPermission(item.permission)"
+                                    :href="route(item.route)"
+                                    :class="[
+                                        route().current(item.route)
+                                            ? 'bg-primary text-primary-foreground font-semibold shadow-sm'
+                                            : 'text-text-secondary hover:bg-surface-raised hover:text-text-primary',
+                                        'flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-150'
+                                    ]"
+                                    @click="toggleMobileSidebar"
+                                >
+                                    <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="item.icon"></path>
+                                    </svg>
+                                    <span>{{ item.name }}</span>
+                                </Link>
+                            </template>
+                        </div>
+                    </template>
                 </nav>
 
             </aside>
