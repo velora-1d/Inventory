@@ -65,7 +65,7 @@ const submit = () => {
                 style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 32px 32px;"></div>
 
             <!-- Content -->
-            <div class="relative z-10 flex flex-col h-full px-14 py-12">
+            <div class="relative z-10 flex flex-col h-full pl-20 pr-8 py-12">
                 <!-- Logo -->
                 <div class="flex items-center gap-4">
                     <div class="h-[4.5rem] w-[4.5rem] rounded-2xl bg-[#c8a96e] flex items-center justify-center shadow-xl">
