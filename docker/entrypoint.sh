@@ -1,8 +1,8 @@
 #!/bin/sh
 
-echo "Waiting for database connection..."
-# Tunggu sampai database MySQL siap menerima koneksi (menggunakan port 3306)
-until nc -z -v -w30 db 3306
+echo "Waiting for database connection to ${DB_HOST:-127.0.0.1}:${DB_PORT:-3306}..."
+# Tunggu sampai database siap menerima koneksi (membaca host & port secara dinamis dari env)
+until nc -z -v -w30 "${DB_HOST:-127.0.0.1}" "${DB_PORT:-3306}"
 do
   echo "Database is not ready yet. Retrying in 2 seconds..."
   sleep 2
