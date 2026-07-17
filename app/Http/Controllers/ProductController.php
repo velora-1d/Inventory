@@ -85,10 +85,25 @@ class ProductController extends Controller
             'sku.unique' => 'SKU / Kode barang sudah digunakan.',
         ]);
 
-        // Handle photo upload
+        // Handle photo upload with auto-optimization
         if ($request->hasFile('photo_file')) {
-            $path = $request->file('photo_file')->store('products', 'public');
-            $validated['photo'] = Storage::url($path);
+            $file = $request->file('photo_file');
+            
+            // Auto optimize using Intervention Image (v3+)
+            $manager = \Intervention\Image\ImageManager::gd();
+            $image = $manager->read($file);
+            
+            // Resize image to maximum width of 800px preserving aspect ratio
+            $image->scale(width: 800);
+            
+            // Encode as WebP format with 80% compression quality
+            $encoded = $image->toWebp(80);
+            
+            // Save to storage public disk
+            $filename = 'products/' . uniqid() . '.webp';
+            Storage::disk('public')->put($filename, $encoded->toString());
+            
+            $validated['photo'] = Storage::url($filename);
         }
 
         // Set average price equals purchase price initially
@@ -123,7 +138,7 @@ class ProductController extends Controller
             'sku.unique' => 'SKU / Kode barang sudah digunakan.',
         ]);
 
-        // Handle photo upload
+        // Handle photo upload with auto-optimization
         if ($request->hasFile('photo_file')) {
             // Delete old photo if it exists
             if ($product->photo) {
@@ -131,8 +146,23 @@ class ProductController extends Controller
                 Storage::disk('public')->delete($oldPath);
             }
 
-            $path = $request->file('photo_file')->store('products', 'public');
-            $validated['photo'] = Storage::url($path);
+            $file = $request->file('photo_file');
+            
+            // Auto optimize using Intervention Image (v3+)
+            $manager = \Intervention\Image\ImageManager::gd();
+            $image = $manager->read($file);
+            
+            // Resize image to maximum width of 800px preserving aspect ratio
+            $image->scale(width: 800);
+            
+            // Encode as WebP format with 80% compression quality
+            $encoded = $image->toWebp(80);
+            
+            // Save to storage public disk
+            $filename = 'products/' . uniqid() . '.webp';
+            Storage::disk('public')->put($filename, $encoded->toString());
+            
+            $validated['photo'] = Storage::url($filename);
         }
 
         $product->update($validated);
