@@ -1,0 +1,6 @@
+{
+  "baseUrl": "https://inventory.santrix.my.id",
+  "projectPath": "/home/pak-hakim/Hakim/Project/Inventory",
+  "type": "frontend",
+  "testScope": "codebase"
+}

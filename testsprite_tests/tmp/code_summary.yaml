@@ -1,0 +1,467 @@
+version: "2"
+type: frontend
+tech_stack:
+  - language: PHP 8.3 + TypeScript
+  - framework: Laravel 13 + Inertia.js + Vue 3
+  - ui_library: Tailwind CSS + HeadlessUI
+  - other: Vite, TiDB Cloud, RustFS/S3
+
+routes:
+  - path: /login
+    file: resources/js/Pages/Auth/Login.vue
+    auth_required: false
+    description: Halaman login sistem inventory
+  - path: /dashboard
+    file: resources/js/Pages/Dashboard.vue
+    auth_required: true
+    description: Dashboard dengan statistik stok
+  - path: /products
+    file: resources/js/Pages/Products/Index.vue
+    auth_required: true
+    description: Manajemen data barang
+  - path: /categories
+    file: resources/js/Pages/Categories/Index.vue
+    auth_required: true
+    description: Manajemen kategori barang
+  - path: /units
+    file: resources/js/Pages/Units/Index.vue
+    auth_required: true
+    description: Manajemen satuan barang
+  - path: /suppliers
+    file: resources/js/Pages/Suppliers/Index.vue
+    auth_required: true
+    description: Manajemen supplier
+  - path: /warehouses
+    file: resources/js/Pages/Warehouses/Index.vue
+    auth_required: true
+    description: Manajemen gudang/lokasi
+  - path: /goods-receipts
+    file: resources/js/Pages/GoodsReceipts/Index.vue
+    auth_required: true
+    description: Barang masuk
+  - path: /goods-issues
+    file: resources/js/Pages/GoodsIssues/Index.vue
+    auth_required: true
+    description: Barang keluar
+  - path: /stock-transfers
+    file: resources/js/Pages/StockTransfers/Index.vue
+    auth_required: true
+    description: Transfer stok antar gudang
+  - path: /stock-opnames
+    file: resources/js/Pages/StockOpnames/Index.vue
+    auth_required: true
+    description: Stock opname/audit fisik
+  - path: /stock-returns
+    file: resources/js/Pages/StockReturns/Index.vue
+    auth_required: true
+    description: Retur barang ke supplier
+  - path: /stock-card
+    file: resources/js/Pages/Reports/StockCard.vue
+    auth_required: true
+    description: Kartu stok per barang
+  - path: /stock-mutations
+    file: resources/js/Pages/Reports/StockMutation.vue
+    auth_required: true
+    description: Laporan mutasi barang
+  - path: /inventory-value
+    file: resources/js/Pages/Reports/InventoryValue.vue
+    auth_required: true
+    description: Laporan nilai persediaan
+  - path: /minimum-stock
+    file: resources/js/Pages/Reports/MinimumStock.vue
+    auth_required: true
+    description: Laporan stok minimum
+  - path: /users
+    file: resources/js/Pages/Users/Index.vue
+    auth_required: true
+    description: Manajemen user
+  - path: /roles
+    file: resources/js/Pages/Roles/Index.vue
+    auth_required: true
+    description: Manajemen role dan permission
+  - path: /stock-notifications
+    file: resources/js/Pages/Notifications/Index.vue
+    auth_required: true
+    description: Notifikasi stok minimum
+  - path: /settings/user
+    file: resources/js/Pages/Settings/UserSettings.vue
+    auth_required: true
+    description: Pengaturan akun pengguna
+
+features:
+  - name: Login
+    description: Login dengan email dan password admin
+    files:
+      - resources/js/Pages/Auth/Login.vue
+    entry_route: /login
+    user_interactions:
+      - Isi field email dengan admin@inventory.com
+      - Isi field password dengan password
+      - Klik tombol Masuk ke Sistem
+      - Redirect ke /dashboard setelah berhasil
+    api_calls:
+      - method: POST
+        endpoint: /login
+    auth_required: false
+
+  - name: Dashboard
+    description: Halaman utama dengan statistik stok dan grafik
+    files:
+      - resources/js/Pages/Dashboard.vue
+    entry_route: /dashboard
+    user_interactions:
+      - Lihat card Total SKU Aktif
+      - Lihat card Nilai Persediaan
+      - Lihat card Barang Masuk Hari Ini
+      - Lihat grafik pergerakan stok
+    api_calls:
+      - method: GET
+        endpoint: /dashboard
+    auth_required: true
+
+  - name: CRUD Data Barang
+    description: Tambah, edit, hapus, cari, filter data barang
+    files:
+      - resources/js/Pages/Products/Index.vue
+    entry_route: /products
+    user_interactions:
+      - Klik tombol Tambah Barang
+      - Isi form modal nama, SKU, kategori, satuan, harga, stok minimum
+      - Upload foto barang
+      - Simpan barang baru
+      - Klik tombol Ubah pada baris barang
+      - Edit data dan simpan perubahan
+      - Klik tombol Hapus dan konfirmasi
+      - Filter berdasarkan kategori
+      - Filter berdasarkan supplier
+      - Cari barang dengan search input
+    api_calls:
+      - method: GET
+        endpoint: /products
+      - method: POST
+        endpoint: /products
+      - method: PUT
+        endpoint: /products/{id}
+      - method: DELETE
+        endpoint: /products/{id}
+    auth_required: true
+
+  - name: CRUD Kategori Barang
+    description: Manajemen kategori
+    files:
+      - resources/js/Pages/Categories/Index.vue
+    entry_route: /categories
+    user_interactions:
+      - Klik Tambah Kategori
+      - Isi nama dan deskripsi kategori
+      - Simpan kategori
+      - Edit kategori yang ada
+      - Hapus kategori dengan konfirmasi
+      - Cari kategori
+    api_calls:
+      - method: GET
+        endpoint: /categories
+      - method: POST
+        endpoint: /categories
+      - method: PUT
+        endpoint: /categories/{id}
+      - method: DELETE
+        endpoint: /categories/{id}
+    auth_required: true
+
+  - name: CRUD Satuan Barang
+    description: Manajemen satuan ukuran barang
+    files:
+      - resources/js/Pages/Units/Index.vue
+    entry_route: /units
+    user_interactions:
+      - Tambah satuan baru dengan nama dan simbol
+      - Edit satuan
+      - Hapus satuan
+    api_calls:
+      - method: GET
+        endpoint: /units
+      - method: POST
+        endpoint: /units
+      - method: PUT
+        endpoint: /units/{id}
+      - method: DELETE
+        endpoint: /units/{id}
+    auth_required: true
+
+  - name: CRUD Supplier
+    description: Manajemen data supplier
+    files:
+      - resources/js/Pages/Suppliers/Index.vue
+    entry_route: /suppliers
+    user_interactions:
+      - Tambah supplier dengan nama, telepon, email, alamat
+      - Edit data supplier
+      - Hapus supplier
+      - Cari supplier
+    api_calls:
+      - method: GET
+        endpoint: /suppliers
+      - method: POST
+        endpoint: /suppliers
+      - method: PUT
+        endpoint: /suppliers/{id}
+      - method: DELETE
+        endpoint: /suppliers/{id}
+    auth_required: true
+
+  - name: CRUD Gudang/Lokasi
+    description: Manajemen gudang dan lokasi penyimpanan
+    files:
+      - resources/js/Pages/Warehouses/Index.vue
+    entry_route: /warehouses
+    user_interactions:
+      - Tambah gudang dengan nama, kode, alamat
+      - Edit gudang
+      - Hapus gudang
+    api_calls:
+      - method: GET
+        endpoint: /warehouses
+      - method: POST
+        endpoint: /warehouses
+      - method: PUT
+        endpoint: /warehouses/{id}
+      - method: DELETE
+        endpoint: /warehouses/{id}
+    auth_required: true
+
+  - name: CRUD Barang Masuk
+    description: Input penerimaan barang dari supplier
+    files:
+      - resources/js/Pages/GoodsReceipts/Index.vue
+    entry_route: /goods-receipts
+    user_interactions:
+      - Klik Tambah Penerimaan
+      - Pilih supplier dan gudang
+      - Tambah item barang dan qty
+      - Simpan transaksi
+      - Filter berdasarkan tanggal
+      - Filter berdasarkan supplier
+      - Klik detail untuk lihat modal detail
+      - Hapus transaksi
+    api_calls:
+      - method: GET
+        endpoint: /goods-receipts
+      - method: POST
+        endpoint: /goods-receipts
+      - method: DELETE
+        endpoint: /goods-receipts/{id}
+    auth_required: true
+
+  - name: CRUD Barang Keluar
+    description: Input pengeluaran barang dari gudang
+    files:
+      - resources/js/Pages/GoodsIssues/Index.vue
+    entry_route: /goods-issues
+    user_interactions:
+      - Tambah transaksi keluar
+      - Pilih barang dan qty
+      - Filter berdasarkan tanggal
+      - Filter berdasarkan gudang
+      - Hapus transaksi
+    api_calls:
+      - method: GET
+        endpoint: /goods-issues
+      - method: POST
+        endpoint: /goods-issues
+      - method: DELETE
+        endpoint: /goods-issues/{id}
+    auth_required: true
+
+  - name: CRUD Transfer Stok
+    description: Transfer stok antar gudang
+    files:
+      - resources/js/Pages/StockTransfers/Index.vue
+    entry_route: /stock-transfers
+    user_interactions:
+      - Buat transfer dari gudang asal ke gudang tujuan
+      - Pilih barang dan jumlah
+      - Konfirmasi transfer
+      - Hapus transfer
+    api_calls:
+      - method: GET
+        endpoint: /stock-transfers
+      - method: POST
+        endpoint: /stock-transfers
+      - method: DELETE
+        endpoint: /stock-transfers/{id}
+    auth_required: true
+
+  - name: CRUD Stock Opname
+    description: Audit fisik stok barang
+    files:
+      - resources/js/Pages/StockOpnames/Index.vue
+    entry_route: /stock-opnames
+    user_interactions:
+      - Buat stock opname baru
+      - Input qty fisik barang
+      - Simpan dan selesaikan opname
+      - Lihat detail opname
+    api_calls:
+      - method: GET
+        endpoint: /stock-opnames
+      - method: POST
+        endpoint: /stock-opnames
+    auth_required: true
+
+  - name: CRUD Retur Barang
+    description: Pengembalian barang ke supplier
+    files:
+      - resources/js/Pages/StockReturns/Index.vue
+    entry_route: /stock-returns
+    user_interactions:
+      - Buat retur barang
+      - Pilih supplier dan barang yang diretur
+      - Isi alasan retur
+      - Simpan retur
+      - Hapus retur
+    api_calls:
+      - method: GET
+        endpoint: /stock-returns
+      - method: POST
+        endpoint: /stock-returns
+      - method: DELETE
+        endpoint: /stock-returns/{id}
+    auth_required: true
+
+  - name: Laporan Kartu Stok
+    description: Riwayat mutasi per barang
+    files:
+      - resources/js/Pages/Reports/StockCard.vue
+    entry_route: /stock-card
+    user_interactions:
+      - Pilih barang dari dropdown
+      - Filter tanggal mulai dan akhir
+      - Lihat tabel kartu stok
+    api_calls:
+      - method: GET
+        endpoint: /stock-card
+    auth_required: true
+
+  - name: Laporan Mutasi Barang
+    description: Laporan semua mutasi stok
+    files:
+      - resources/js/Pages/Reports/StockMutation.vue
+    entry_route: /stock-mutations
+    user_interactions:
+      - Filter berdasarkan tanggal
+      - Filter berdasarkan jenis mutasi
+      - Lihat tabel hasil
+    api_calls:
+      - method: GET
+        endpoint: /stock-mutations
+    auth_required: true
+
+  - name: Laporan Nilai Persediaan
+    description: Nilai total persediaan barang
+    files:
+      - resources/js/Pages/Reports/InventoryValue.vue
+    entry_route: /inventory-value
+    user_interactions:
+      - Filter berdasarkan kategori
+      - Filter berdasarkan gudang
+      - Lihat nilai total persediaan
+    api_calls:
+      - method: GET
+        endpoint: /inventory-value
+    auth_required: true
+
+  - name: Laporan Stok Minimum
+    description: Daftar barang di bawah stok minimum
+    files:
+      - resources/js/Pages/Reports/MinimumStock.vue
+    entry_route: /minimum-stock
+    user_interactions:
+      - Lihat daftar barang stok rendah
+      - Filter berdasarkan gudang
+    api_calls:
+      - method: GET
+        endpoint: /minimum-stock
+    auth_required: true
+
+  - name: CRUD Manajemen User
+    description: Tambah, edit, hapus user dan ubah role
+    files:
+      - resources/js/Pages/Users/Index.vue
+    entry_route: /users
+    user_interactions:
+      - Tambah user baru dengan nama, email, password, role
+      - Edit data user
+      - Ubah role user (Admin/Staff Gudang/Kasir/Manager)
+      - Hapus user
+      - Cari user
+    api_calls:
+      - method: GET
+        endpoint: /users
+      - method: POST
+        endpoint: /users
+      - method: PUT
+        endpoint: /users/{id}
+      - method: DELETE
+        endpoint: /users/{id}
+    auth_required: true
+
+  - name: CRUD Role dan Permission
+    description: Manajemen role dan hak akses
+    files:
+      - resources/js/Pages/Roles/Index.vue
+    entry_route: /roles
+    user_interactions:
+      - Tambah role baru
+      - Assign permission ke role
+      - Edit role
+      - Hapus role
+    api_calls:
+      - method: GET
+        endpoint: /roles
+      - method: POST
+        endpoint: /roles
+      - method: PUT
+        endpoint: /roles/{id}
+      - method: DELETE
+        endpoint: /roles/{id}
+    auth_required: true
+
+  - name: Notifikasi Stok
+    description: Notifikasi barang di bawah stok minimum
+    files:
+      - resources/js/Pages/Notifications/Index.vue
+    entry_route: /stock-notifications
+    user_interactions:
+      - Lihat daftar notifikasi stok rendah
+      - Tandai notifikasi sudah dibaca
+    api_calls:
+      - method: GET
+        endpoint: /stock-notifications
+    auth_required: true
+
+  - name: Pengaturan Akun
+    description: Ubah profil, password, email, toggle dark/light mode
+    files:
+      - resources/js/Pages/Settings/UserSettings.vue
+    entry_route: /settings/user
+    user_interactions:
+      - Ubah nama profil
+      - Ubah email akun
+      - Ubah password lama dengan password baru
+      - Toggle dark mode
+      - Toggle light mode
+      - Tes koneksi database
+      - Tes koneksi S3
+    api_calls:
+      - method: PUT
+        endpoint: /settings/user/profile
+      - method: PUT
+        endpoint: /settings/user/password
+      - method: POST
+        endpoint: /settings/user/test-db
+      - method: POST
+        endpoint: /settings/user/test-s3
+    auth_required: true
+
+known_limitations: []

@@ -1,0 +1,32 @@
+{
+  "projectId": "c72c5bf1-daa6-48e7-85dd-c1aa87103409",
+  "type": "frontend",
+  "name": "CRUD Barang Masuk - Tambah, Filter Tanggal, Filter Supplier, Modal Detail, Hapus",
+  "priority": "p0",
+  "description": "Test CRUD barang masuk: input penerimaan, filter tanggal, filter supplier, lihat modal detail, hapus. Login admin dulu.",
+  "planSteps": [
+    { "type": "action", "description": "Navigate to /login, fill email admin@inventory.com and password password, click login" },
+    { "type": "assertion", "description": "User redirected to dashboard" },
+    { "type": "action", "description": "Navigate to /goods-receipts" },
+    { "type": "assertion", "description": "Barang Masuk page is visible" },
+    { "type": "action", "description": "Click Tambah Penerimaan button" },
+    { "type": "assertion", "description": "Create barang masuk form or modal is open" },
+    { "type": "action", "description": "Select a supplier from the supplier dropdown" },
+    { "type": "action", "description": "Select a gudang/warehouse as destination" },
+    { "type": "action", "description": "Add an item: click add item button, select a product, fill quantity, fill unit price" },
+    { "type": "action", "description": "Click Simpan to save the transaction" },
+    { "type": "assertion", "description": "New goods receipt transaction appears in the table" },
+    { "type": "action", "description": "Click the detail/view icon on the new transaction row" },
+    { "type": "assertion", "description": "Detail modal opens showing transaction information" },
+    { "type": "action", "description": "Close the detail modal" },
+    { "type": "action", "description": "Set tanggal dari (start date) filter to first day of this month" },
+    { "type": "action", "description": "Set tanggal sampai (end date) filter to today" },
+    { "type": "assertion", "description": "Table shows transactions within the date range" },
+    { "type": "action", "description": "Select a supplier in the supplier filter dropdown" },
+    { "type": "assertion", "description": "Table filtered by selected supplier" },
+    { "type": "action", "description": "Click Hapus on the test transaction row" },
+    { "type": "assertion", "description": "Confirmation modal appears" },
+    { "type": "action", "description": "Click confirm Hapus" },
+    { "type": "assertion", "description": "Transaction is removed from the table" }
+  ]
+}

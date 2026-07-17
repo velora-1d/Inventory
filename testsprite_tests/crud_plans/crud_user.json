@@ -1,0 +1,27 @@
+{
+  "projectId": "c72c5bf1-daa6-48e7-85dd-c1aa87103409",
+  "type": "frontend",
+  "name": "CRUD Manajemen User - Tambah, Edit, Ubah Role, Hapus",
+  "priority": "p0",
+  "description": "Test CRUD user: tambah user baru, ubah role ke Manager, hapus. Login admin dulu.",
+  "planSteps": [
+    { "type": "action", "description": "Navigate to /login, fill email admin@inventory.com and password password, click login" },
+    { "type": "assertion", "description": "User redirected to dashboard" },
+    { "type": "action", "description": "Navigate to /users" },
+    { "type": "assertion", "description": "Manajemen User page visible with users table" },
+    { "type": "action", "description": "Click Tambah User button" },
+    { "type": "assertion", "description": "Create user modal is open" },
+    { "type": "action", "description": "Fill nama with 'User CRUD Test', email with 'usercrud@test.com', password with 'Password123!', select role 'Staff Gudang' from dropdown, then click Simpan" },
+    { "type": "assertion", "description": "'User CRUD Test' appears in users table with role Staff Gudang" },
+    { "type": "action", "description": "Click Ubah button on User CRUD Test row" },
+    { "type": "assertion", "description": "Edit user modal opens" },
+    { "type": "action", "description": "Change the role to 'Manager' and click Simpan" },
+    { "type": "assertion", "description": "User role updated to Manager" },
+    { "type": "action", "description": "Type 'User CRUD Test' in the search input" },
+    { "type": "assertion", "description": "User CRUD Test found in search results" },
+    { "type": "action", "description": "Click Hapus on User CRUD Test row" },
+    { "type": "assertion", "description": "Confirmation modal appears" },
+    { "type": "action", "description": "Click confirm Hapus" },
+    { "type": "assertion", "description": "User CRUD Test removed from table" }
+  ]
+}

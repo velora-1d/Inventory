@@ -16,7 +16,13 @@ const props = defineProps<{
 
 // Profile form
 const profileForm = useForm({ name: props.user.name, email: props.user.email });
-const submitProfile = () => profileForm.patch(route('settings.user.profile'));
+const profileSaved = ref(false);
+const submitProfile = () => profileForm.patch(route('settings.user.profile'), {
+    onSuccess: () => {
+        profileSaved.value = true;
+        setTimeout(() => { profileSaved.value = false; }, 5000);
+    },
+});
 
 // Password form
 const passwordForm = useForm({ current_password: '', password: '', password_confirmation: '' });
@@ -191,10 +197,14 @@ const roles = ['Admin', 'Staff Gudang', 'Kasir', 'Manager'];
                         <input v-model="profileForm.name" type="text" class="w-full px-3.5 py-2.5 rounded-xl border border-border-warm bg-gray-50 dark:bg-gray-700 text-text-primary focus:outline-none focus:ring-2 focus:ring-orange-400 text-sm" />
                         <p v-if="profileForm.errors.name" class="text-xs text-red-500 mt-1">{{ profileForm.errors.name }}</p>
                     </div>
-                    <div>
+                    <div v-if="!profileSaved">
                         <label class="block text-sm font-semibold text-text-primary mb-1.5">Alamat Email</label>
                         <input v-model="profileForm.email" type="email" class="w-full px-3.5 py-2.5 rounded-xl border border-border-warm bg-gray-50 dark:bg-gray-700 text-text-primary focus:outline-none focus:ring-2 focus:ring-orange-400 text-sm" />
                         <p v-if="profileForm.errors.email" class="text-xs text-red-500 mt-1">{{ profileForm.errors.email }}</p>
+                    </div>
+                    <div v-else class="flex items-center gap-2 px-3.5 py-2.5 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 rounded-xl border border-emerald-200 dark:border-emerald-800 text-sm font-medium" id="profile-saved-banner">
+                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        Profil berhasil disimpan!
                     </div>
                     <div class="flex justify-end pt-2">
                         <button type="submit" :disabled="profileForm.processing" class="px-5 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 font-semibold rounded-xl text-sm hover:opacity-90 transition-all disabled:opacity-50 active:scale-95">

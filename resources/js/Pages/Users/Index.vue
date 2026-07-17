@@ -66,6 +66,13 @@ const roleColor: Record<string, string> = {
     'admin':       'bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-350 border border-blue-200 dark:border-blue-900',
     'staff':       'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-350 border border-emerald-200 dark:border-emerald-900',
 };
+const roleLabel: Record<string, string> = {
+    'super-admin': 'Super Admin',
+    'admin':       'Admin',
+    'staff':       'Staff Gudang',
+    'manager':     'Manager',
+};
+const getRoleLabel = (name: string) => roleLabel[name] ?? name;
 const getRoleColor = (name: string) => roleColor[name] ?? 'bg-gray-50 text-gray-700 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 dark:border-gray-700';
 
 const avatarColors = ['bg-orange-600', 'bg-emerald-600', 'bg-blue-600', 'bg-cyan-600', 'bg-amber-600'];
@@ -201,7 +208,7 @@ const initials  = (name: string) => name.split(' ').slice(0, 2).map(w => w[0]).j
                                     <label class="block text-sm font-semibold text-gray-750 dark:text-gray-250 mb-1">Role / Peran <span class="text-red-500">*</span></label>
                                     <select v-model="form.role" required class="w-full px-3 py-2 text-sm rounded-xl border border-gray-250 dark:border-gray-650 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500">
                                         <option value="">Pilih role</option>
-                                        <option v-for="r in allRoles" :key="r.id" :value="r.name">{{ r.name }}</option>
+                                        <option v-for="r in allRoles" :key="r.id" :value="r.name">{{ getRoleLabel(r.name) }}</option>
                                     </select>
                                     <p v-if="form.errors.role" class="text-xs text-red-500 mt-1">{{ form.errors.role }}</p>
                                 </div>

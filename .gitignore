@@ -31,3 +31,5 @@ Thumbs.db
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+testsprite_tests/tmp/config.json

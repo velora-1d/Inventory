@@ -1,0 +1,27 @@
+{
+  "projectId": "c72c5bf1-daa6-48e7-85dd-c1aa87103409",
+  "type": "frontend",
+  "name": "CRUD Supplier - Tambah, Edit, Search, Hapus",
+  "priority": "p0",
+  "description": "Test CRUD supplier: tambah supplier baru, cari, edit, hapus. Login admin dulu.",
+  "planSteps": [
+    { "type": "action", "description": "Navigate to /login, fill email admin@inventory.com and password password, click login" },
+    { "type": "assertion", "description": "User redirected to dashboard" },
+    { "type": "action", "description": "Navigate to /suppliers" },
+    { "type": "assertion", "description": "Supplier page is visible with table" },
+    { "type": "action", "description": "Click Tambah Supplier button" },
+    { "type": "assertion", "description": "Create supplier modal is open" },
+    { "type": "action", "description": "Fill nama with 'PT Test CRUD', telepon with '08123456789', email with 'test@supplier.com', alamat with 'Jl. Test No. 1', then click Simpan" },
+    { "type": "assertion", "description": "'PT Test CRUD' appears in the suppliers table" },
+    { "type": "action", "description": "Type 'PT Test CRUD' in the search input" },
+    { "type": "assertion", "description": "Table is filtered showing only PT Test CRUD" },
+    { "type": "action", "description": "Click the Ubah button on PT Test CRUD row" },
+    { "type": "assertion", "description": "Edit modal opens with current data" },
+    { "type": "action", "description": "Update the name to 'PT Test CRUD Updated' and click Simpan" },
+    { "type": "assertion", "description": "Name updated to PT Test CRUD Updated" },
+    { "type": "action", "description": "Click the Hapus button on PT Test CRUD Updated" },
+    { "type": "assertion", "description": "Confirmation modal appears" },
+    { "type": "action", "description": "Click confirm Hapus" },
+    { "type": "assertion", "description": "PT Test CRUD Updated is removed from table" }
+  ]
+}

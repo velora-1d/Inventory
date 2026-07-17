@@ -1,0 +1,2260 @@
+[
+  {
+    "id": "TC001",
+    "title": "Admin logs in successfully",
+    "description": "Verifies that an admin can sign in with valid credentials and reach the dashboard.",
+    "category": "Login",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the dashboard is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC002",
+    "title": "Create a stock transfer draft",
+    "description": "Verifies that a user can create a stock transfer draft between different warehouses and see it saved with draft status.",
+    "category": "CRUD Transfer Stok",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /stock-transfers"
+      },
+      {
+        "type": "action",
+        "description": "Open the add transfer form"
+      },
+      {
+        "type": "action",
+        "description": "Select a different source warehouse and destination warehouse"
+      },
+      {
+        "type": "action",
+        "description": "Add a product item and set a quantity within available stock"
+      },
+      {
+        "type": "action",
+        "description": "Save the transfer as a draft"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new transfer is displayed with draft status"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC003",
+    "title": "Admin reaches dashboard KPIs and stock chart",
+    "description": "Verifies that a logged-in admin can view the dashboard summary cards, activity chart, and low-stock list.",
+    "category": "Dashboard",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify inventory KPI summaries are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify stock activity and low-stock information are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC004",
+    "title": "Create a goods receipt draft",
+    "description": "Verifies that a warehouse operator can create a goods receipt draft with supplier, warehouse, items, and quantities.",
+    "category": "CRUD Barang Masuk",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /goods-receipts"
+      },
+      {
+        "type": "action",
+        "description": "Open the add transaction form"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the transaction date field with a valid date"
+      },
+      {
+        "type": "action",
+        "description": "Select a supplier"
+      },
+      {
+        "type": "action",
+        "description": "Select a warehouse"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the reference number field with a unique reference"
+      },
+      {
+        "type": "action",
+        "description": "Add a product item"
+      },
+      {
+        "type": "action",
+        "description": "Set a valid quantity for the item"
+      },
+      {
+        "type": "action",
+        "description": "Save the transaction as a draft"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new receipt appears with draft status"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the receipt list is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC005",
+    "title": "Create a stock opname draft",
+    "description": "Verifies that a user can create a stock opname draft for a warehouse and review loaded item rows before saving.",
+    "category": "CRUD Stock Opname",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /stock-opnames"
+      },
+      {
+        "type": "action",
+        "description": "Open the add stock opname form"
+      },
+      {
+        "type": "action",
+        "description": "Select a warehouse with stocked items"
+      },
+      {
+        "type": "action",
+        "description": "Review the auto-loaded item list"
+      },
+      {
+        "type": "action",
+        "description": "Adjust one or more physical quantities"
+      },
+      {
+        "type": "action",
+        "description": "Save the stock opname as a draft"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new stock opname is displayed with draft status"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC006",
+    "title": "Create a goods issue draft within available stock",
+    "description": "Verifies that a warehouse operator can create a goods issue draft with quantities that do not exceed available stock.",
+    "category": "CRUD Barang Keluar",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /goods-issues"
+      },
+      {
+        "type": "action",
+        "description": "Open the add transaction form"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the transaction date field with a valid date"
+      },
+      {
+        "type": "action",
+        "description": "Select a warehouse"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the recipient field with a valid recipient"
+      },
+      {
+        "type": "action",
+        "description": "Add a product item"
+      },
+      {
+        "type": "action",
+        "description": "Set a valid quantity within available stock"
+      },
+      {
+        "type": "action",
+        "description": "Save the transaction as a draft"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new issue appears with draft status"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the issue list is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC007",
+    "title": "Complete a draft goods receipt",
+    "description": "Verifies that a warehouse operator can complete a saved draft receipt and see its status change to completed.",
+    "category": "CRUD Barang Masuk",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /goods-receipts"
+      },
+      {
+        "type": "action",
+        "description": "Open a draft receipt"
+      },
+      {
+        "type": "action",
+        "description": "Complete the transaction"
+      },
+      {
+        "type": "action",
+        "description": "Confirm completion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the receipt status changes to completed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the completed receipt remains in the list"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC008",
+    "title": "Complete a draft stock transfer",
+    "description": "Verifies that a saved draft transfer can be completed and changes to finished status.",
+    "category": "CRUD Transfer Stok",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /stock-transfers"
+      },
+      {
+        "type": "action",
+        "description": "Open an existing draft transfer"
+      },
+      {
+        "type": "action",
+        "description": "Complete the transfer"
+      },
+      {
+        "type": "action",
+        "description": "Confirm the completion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the transfer is displayed with completed status"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC009",
+    "title": "Complete a draft stock opname",
+    "description": "Verifies that a saved draft stock opname can be completed and changes to finished status.",
+    "category": "CRUD Stock Opname",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /stock-opnames"
+      },
+      {
+        "type": "action",
+        "description": "Open an existing draft stock opname"
+      },
+      {
+        "type": "action",
+        "description": "Complete the stock opname"
+      },
+      {
+        "type": "action",
+        "description": "Confirm the completion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the stock opname is displayed with completed status"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC010",
+    "title": "Complete a draft goods issue",
+    "description": "Verifies that a warehouse operator can complete a saved draft issue and see its status change to completed.",
+    "category": "CRUD Barang Keluar",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /goods-issues"
+      },
+      {
+        "type": "action",
+        "description": "Open a draft issue"
+      },
+      {
+        "type": "action",
+        "description": "Complete the transaction"
+      },
+      {
+        "type": "action",
+        "description": "Confirm completion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the issue status changes to completed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the completed issue remains in the list"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC011",
+    "title": "Create a new user with a warehouse role",
+    "description": "This verifies that an administrator can add a new user, assign a role and warehouse, and see the user in the list.",
+    "category": "CRUD Manajemen User",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /users"
+      },
+      {
+        "type": "action",
+        "description": "Open the add user form"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the user profile details with a new user name and email"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with a valid password"
+      },
+      {
+        "type": "action",
+        "description": "Select a role"
+      },
+      {
+        "type": "action",
+        "description": "Select a warehouse"
+      },
+      {
+        "type": "action",
+        "description": "Save the user"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new user appears in the user list"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC012",
+    "title": "User creates a new product with master data and photo",
+    "description": "Verifies that a user can add a product with category, unit, supplier, warehouse assignment, and a photo, then see it in the product list.",
+    "category": "CRUD Data Barang",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Open the add product form"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the product name field with a unique product name"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the SKU field with a unique SKU"
+      },
+      {
+        "type": "action",
+        "description": "Select a category"
+      },
+      {
+        "type": "action",
+        "description": "Select a unit"
+      },
+      {
+        "type": "action",
+        "description": "Select a supplier"
+      },
+      {
+        "type": "action",
+        "description": "Select a warehouse"
+      },
+      {
+        "type": "action",
+        "description": "Upload a product photo"
+      },
+      {
+        "type": "action",
+        "description": "Save the new product"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new product appears in the product list"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC013",
+    "title": "Create a return draft",
+    "description": "Verifies that a user can create a return draft with item quantities and a reason and see it saved with draft status.",
+    "category": "CRUD Retur Barang",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /stock-returns"
+      },
+      {
+        "type": "action",
+        "description": "Open the add return form"
+      },
+      {
+        "type": "action",
+        "description": "Choose a return type and warehouse"
+      },
+      {
+        "type": "action",
+        "description": "Add an item row and enter a return quantity"
+      },
+      {
+        "type": "action",
+        "description": "Enter a return reason"
+      },
+      {
+        "type": "action",
+        "description": "Save the return as a draft"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new return is displayed with draft status"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC014",
+    "title": "Complete a draft return",
+    "description": "Verifies that a saved draft return can be completed and changes to finished status.",
+    "category": "CRUD Retur Barang",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /stock-returns"
+      },
+      {
+        "type": "action",
+        "description": "Open an existing draft return"
+      },
+      {
+        "type": "action",
+        "description": "Complete the return"
+      },
+      {
+        "type": "action",
+        "description": "Confirm the completion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the return is displayed with completed status"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC015",
+    "title": "Filter stock mutation report by warehouse",
+    "description": "Verifies the stock mutation report can be scoped to one warehouse and shows only rows for that warehouse.",
+    "category": "Laporan Mutasi Barang",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /stock-mutations"
+      },
+      {
+        "type": "action",
+        "description": "Select a warehouse"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the mutation table shows rows for the selected warehouse only"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC016",
+    "title": "Create a minimum stock report view filtered to critical zero-stock items",
+    "description": "This verifies that a user can open the minimum stock report, filter to critical severity, and see only items with zero stock.",
+    "category": "Laporan Stok Minimum",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /minimum-stock"
+      },
+      {
+        "type": "action",
+        "description": "Select severity as Kritis"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify only zero-stock items are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC017",
+    "title": "Admin filters dashboard by warehouse and resets the view",
+    "description": "Verifies that selecting a warehouse updates dashboard statistics and clearing the filter restores the overall view.",
+    "category": "Dashboard",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Select a warehouse filter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the dashboard statistics update for the selected warehouse"
+      },
+      {
+        "type": "action",
+        "description": "Reset the warehouse filter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the overall dashboard statistics are displayed again"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC018",
+    "title": "Create a category",
+    "description": "Verifies that a user can add a new product category and see it appear in the categories list.",
+    "category": "CRUD Kategori Barang",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /categories"
+      },
+      {
+        "type": "action",
+        "description": "Open the add category form"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the category name field with Ops Category A"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the category description field with Temporary test category"
+      },
+      {
+        "type": "action",
+        "description": "Save the category"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new category appears in the list"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC019",
+    "title": "Filter stock card by product and date range",
+    "description": "Verifies a user can narrow the stock card to a single product within a selected date range and see the matching history.",
+    "category": "Laporan Kartu Stok",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /stock-card"
+      },
+      {
+        "type": "action",
+        "description": "Select a product"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid start date into the start date field"
+      },
+      {
+        "type": "action",
+        "description": "Fill a valid end date into the end date field"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the stock card table shows the selected product's history within the chosen date range"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC020",
+    "title": "View low-stock notifications",
+    "description": "An authenticated user can open the low-stock notifications page and see the list of notifications.",
+    "category": "Notifikasi Stok",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for the required role"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to open stock notifications"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the low-stock notifications list is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC021",
+    "title": "Create a supplier",
+    "description": "Verifies that a user can add a new supplier record and see it appear in the suppliers list.",
+    "category": "CRUD Supplier",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /suppliers"
+      },
+      {
+        "type": "action",
+        "description": "Open the add supplier form"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the supplier name field with Supplier A"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the supplier phone field with a valid phone number"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the supplier email field with supplier-a@example.com"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the supplier address field with Supplier address A"
+      },
+      {
+        "type": "action",
+        "description": "Save the supplier"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new supplier appears in the list"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC022",
+    "title": "Filter stock mutation report by product",
+    "description": "Verifies the stock mutation report can be narrowed to one product and shows only rows for that product.",
+    "category": "Laporan Mutasi Barang",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /stock-mutations"
+      },
+      {
+        "type": "action",
+        "description": "Select a product"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the mutation table shows rows for the selected product only"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC023",
+    "title": "Create a warehouse record",
+    "description": "Verifies that an authenticated user can add a new warehouse and see it appear in the warehouse list.",
+    "category": "CRUD Gudang/Lokasi",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /warehouses"
+      },
+      {
+        "type": "action",
+        "description": "Open the add warehouse form"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the warehouse name field with Central Warehouse"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the warehouse code field with CW-01"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the warehouse address field with a valid address"
+      },
+      {
+        "type": "action",
+        "description": "Save the warehouse"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new warehouse appears in the list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the warehouse list remains accessible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC024",
+    "title": "User finds products by search and filters",
+    "description": "Verifies that product search and category or supplier filters narrow the list and can be reset to restore the full catalog.",
+    "category": "CRUD Data Barang",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Search for an existing product"
+      },
+      {
+        "type": "action",
+        "description": "Apply a category filter"
+      },
+      {
+        "type": "action",
+        "description": "Apply a supplier filter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the list shows only matching products"
+      },
+      {
+        "type": "action",
+        "description": "Reset the search and filters"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the full product list is displayed again"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC025",
+    "title": "Create a unit",
+    "description": "Verifies that a user can add a new measurement unit and see it appear in the units list.",
+    "category": "CRUD Satuan Barang",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /units"
+      },
+      {
+        "type": "action",
+        "description": "Open the add unit form"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the unit name field with Box Unit A"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the unit symbol field with BXA"
+      },
+      {
+        "type": "action",
+        "description": "Save the unit"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new unit appears in the list"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC026",
+    "title": "Filter inventory value by warehouse",
+    "description": "Verifies selecting a warehouse scopes the inventory value report to that warehouse.",
+    "category": "Laporan Nilai Persediaan",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /inventory-value"
+      },
+      {
+        "type": "action",
+        "description": "Select a warehouse"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the valuation data is scoped to the selected warehouse"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC027",
+    "title": "Filter inventory value by product SKU",
+    "description": "Verifies a user can search inventory value by SKU and see matching valuation rows.",
+    "category": "Laporan Nilai Persediaan",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /inventory-value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the product SKU field with a valid SKU"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify matching valuation rows are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC028",
+    "title": "Narrow minimum stock results by category and warehouse",
+    "description": "This verifies that category and warehouse filters narrow the minimum stock table to matching items.",
+    "category": "Laporan Stok Minimum",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /minimum-stock"
+      },
+      {
+        "type": "action",
+        "description": "Select a category filter value"
+      },
+      {
+        "type": "action",
+        "description": "Select a warehouse filter value"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the table is narrowed to matching items"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC029",
+    "title": "User updates an existing product",
+    "description": "Verifies that a user can edit an existing product and see the updated record in the table.",
+    "category": "CRUD Data Barang",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Open the edit form for an existing product"
+      },
+      {
+        "type": "action",
+        "description": "Update the product details"
+      },
+      {
+        "type": "action",
+        "description": "Save the changes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated product appears in the product list"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC030",
+    "title": "Review goods receipt details",
+    "description": "Verifies that a user can open a draft goods receipt and view its transaction details and item list.",
+    "category": "CRUD Barang Masuk",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /goods-receipts"
+      },
+      {
+        "type": "action",
+        "description": "Open a draft receipt details view"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the transaction information is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the item list is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC031",
+    "title": "Delete a draft stock transfer",
+    "description": "Verifies that a draft transfer can be deleted and no longer appears in the transfer list.",
+    "category": "CRUD Transfer Stok",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /stock-transfers"
+      },
+      {
+        "type": "action",
+        "description": "Open an existing draft transfer"
+      },
+      {
+        "type": "action",
+        "description": "Delete the transfer"
+      },
+      {
+        "type": "action",
+        "description": "Confirm the deletion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the transfer is no longer displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC032",
+    "title": "Filter inventory value by category",
+    "description": "Verifies selecting a category updates the inventory value table to that category's items.",
+    "category": "Laporan Nilai Persediaan",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /inventory-value"
+      },
+      {
+        "type": "action",
+        "description": "Select a category"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the valuation table is scoped to the selected category"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC033",
+    "title": "Create a new role with assigned permissions",
+    "description": "This verifies that an administrator can create a custom role and see it stored with its selected permissions.",
+    "category": "CRUD Role dan Permission",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /roles"
+      },
+      {
+        "type": "action",
+        "description": "Open the add role form"
+      },
+      {
+        "type": "action",
+        "description": "Enter a new role name"
+      },
+      {
+        "type": "action",
+        "description": "Select permissions in the matrix"
+      },
+      {
+        "type": "action",
+        "description": "Save the role"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new role card appears with assigned permissions"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC034",
+    "title": "Delete a draft stock opname",
+    "description": "Verifies that a draft stock opname can be deleted and no longer appears in the opname list.",
+    "category": "CRUD Stock Opname",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /stock-opnames"
+      },
+      {
+        "type": "action",
+        "description": "Open an existing draft stock opname"
+      },
+      {
+        "type": "action",
+        "description": "Delete the stock opname"
+      },
+      {
+        "type": "action",
+        "description": "Confirm the deletion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the stock opname is no longer displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC035",
+    "title": "Mark a low-stock notification as read",
+    "description": "An authenticated user can mark a low-stock notification as read and see its state update in the list.",
+    "category": "Notifikasi Stok",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for the required role"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to open stock notifications"
+      },
+      {
+        "type": "action",
+        "description": "Mark one low-stock notification as read"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the notification state updates to read"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC036",
+    "title": "Search goods receipts by reference",
+    "description": "Verifies that a user can search goods receipts by reference and narrow the list to matching transactions.",
+    "category": "CRUD Barang Masuk",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /goods-receipts"
+      },
+      {
+        "type": "action",
+        "description": "Enter a transaction reference in the search field"
+      },
+      {
+        "type": "action",
+        "description": "Apply the search"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify only matching receipts are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the search results remain visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC037",
+    "title": "Review stock mutation totals and net change indicators",
+    "description": "Verifies the stock mutation report surfaces positive and negative net change indicators for reconciliation review.",
+    "category": "Laporan Mutasi Barang",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /stock-mutations"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify positive and negative net change indicators are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the mutation totals are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC038",
+    "title": "Update an existing user name from search results",
+    "description": "This verifies that an administrator can find an existing user, edit the name, and see the updated record in the grid.",
+    "category": "CRUD Manajemen User",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /users"
+      },
+      {
+        "type": "action",
+        "description": "Search for an existing user"
+      },
+      {
+        "type": "action",
+        "description": "Open the edit form for the matching user"
+      },
+      {
+        "type": "action",
+        "description": "Update the user name"
+      },
+      {
+        "type": "action",
+        "description": "Save the changes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated user appears in the user list"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC039",
+    "title": "Delete a draft return",
+    "description": "Verifies that a draft return can be deleted and no longer appears in the return list.",
+    "category": "CRUD Retur Barang",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /stock-returns"
+      },
+      {
+        "type": "action",
+        "description": "Open an existing draft return"
+      },
+      {
+        "type": "action",
+        "description": "Delete the return"
+      },
+      {
+        "type": "action",
+        "description": "Confirm the deletion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the return is no longer displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC040",
+    "title": "Update an existing warehouse",
+    "description": "Verifies that a user can edit a warehouse name and see the updated record in the list.",
+    "category": "CRUD Gudang/Lokasi",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /warehouses"
+      },
+      {
+        "type": "action",
+        "description": "Open the edit form for an existing warehouse"
+      },
+      {
+        "type": "action",
+        "description": "Update the warehouse name"
+      },
+      {
+        "type": "action",
+        "description": "Save the changes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated warehouse row is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the warehouse remains in the list"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC041",
+    "title": "View stock opname differences",
+    "description": "Verifies that opening a stock opname details view shows the differences between system and physical quantities.",
+    "category": "CRUD Stock Opname",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /stock-opnames"
+      },
+      {
+        "type": "action",
+        "description": "Open an existing stock opname details view"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the quantity differences are displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC042",
+    "title": "Change account password",
+    "description": "A user can enter the current password, a new password, and confirmation, then save a successful password change.",
+    "category": "Pengaturan Akun",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for the required role"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to open account settings"
+      },
+      {
+        "type": "action",
+        "description": "Enter the current password"
+      },
+      {
+        "type": "action",
+        "description": "Enter a new password"
+      },
+      {
+        "type": "action",
+        "description": "Confirm the new password"
+      },
+      {
+        "type": "action",
+        "description": "Submit the password change"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the password change is accepted"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC043",
+    "title": "User deletes a product from the list",
+    "description": "Verifies that a user can remove an existing product and no longer see it in the product list.",
+    "category": "CRUD Data Barang",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Open the delete action for an existing product"
+      },
+      {
+        "type": "action",
+        "description": "Confirm the deletion"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the product is removed from the product list"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC044",
+    "title": "Show only incoming stock rows in stock card",
+    "description": "Verifies changing the transaction type filter to incoming stock updates the stock card to show only receipt rows.",
+    "category": "Laporan Kartu Stok",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /stock-card"
+      },
+      {
+        "type": "action",
+        "description": "Select a transaction type of incoming stock"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the stock card table shows only incoming stock rows"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC045",
+    "title": "Prevent transfer to the same warehouse",
+    "description": "Verifies that the transfer form shows a validation warning when the same warehouse is selected as both source and destination.",
+    "category": "CRUD Transfer Stok",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /stock-transfers"
+      },
+      {
+        "type": "action",
+        "description": "Open the add transfer form"
+      },
+      {
+        "type": "action",
+        "description": "Select the same warehouse as both source and destination"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a validation warning is visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC046",
+    "title": "Filter and reset warehouse status results",
+    "description": "Verifies that a user can filter warehouses by status and then reset the filter to restore the full list.",
+    "category": "CRUD Gudang/Lokasi",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /warehouses"
+      },
+      {
+        "type": "action",
+        "description": "Search for a warehouse"
+      },
+      {
+        "type": "action",
+        "description": "Change the status filter"
+      },
+      {
+        "type": "action",
+        "description": "Verify the list updates to reflect the filter"
+      },
+      {
+        "type": "action",
+        "description": "Reset the status filter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the warehouse list is restored"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the searched warehouse is visible again"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC047",
+    "title": "Expand permissions for an existing custom role",
+    "description": "This verifies that editing a custom role updates the displayed permission summary after additional permissions are saved.",
+    "category": "CRUD Role dan Permission",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /roles"
+      },
+      {
+        "type": "action",
+        "description": "Open the edit form for an existing custom role"
+      },
+      {
+        "type": "action",
+        "description": "Select additional permissions in the matrix"
+      },
+      {
+        "type": "action",
+        "description": "Save the changes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the role summary reflects the updated permissions"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC048",
+    "title": "Persist read state for a notification",
+    "description": "An authenticated user can mark a notification as read and later see that it remains marked as read when returning to the notifications page.",
+    "category": "Notifikasi Stok",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the login credentials for the required role"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Click the link to open stock notifications"
+      },
+      {
+        "type": "action",
+        "description": "Mark one low-stock notification as read"
+      },
+      {
+        "type": "action",
+        "description": "Leave the notifications page and return to it"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the notification remains marked as read"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC049",
+    "title": "Admin expands and collapses the dashboard sidebar",
+    "description": "Verifies that the dashboard sidebar can be collapsed and expanded without leaving the page.",
+    "category": "Dashboard",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Toggle the sidebar collapse control"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the sidebar changes to the collapsed state"
+      },
+      {
+        "type": "action",
+        "description": "Toggle the sidebar collapse control again"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the sidebar returns to the expanded state"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC050",
+    "title": "Search and reset category filters",
+    "description": "Verifies that searching and status filtering updates the categories list and that resetting the filter restores matching results.",
+    "category": "CRUD Kategori Barang",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the username field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /categories"
+      },
+      {
+        "type": "action",
+        "description": "Search for an existing category"
+      },
+      {
+        "type": "action",
+        "description": "Change the status filter"
+      },
+      {
+        "type": "action",
+        "description": "Reset the status filter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the searched category is visible again"
+      }
+    ],
+    "priority": "Medium"
+  }
+]

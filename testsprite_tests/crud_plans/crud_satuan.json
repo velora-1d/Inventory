@@ -1,0 +1,25 @@
+{
+  "projectId": "c72c5bf1-daa6-48e7-85dd-c1aa87103409",
+  "type": "frontend",
+  "name": "CRUD Satuan Barang - Tambah, Edit, Hapus",
+  "priority": "p0",
+  "description": "Test CRUD satuan barang: tambah satuan baru dengan nama dan simbol, edit, hapus. Login admin dulu.",
+  "planSteps": [
+    { "type": "action", "description": "Navigate to /login, fill email admin@inventory.com and password password, then click the login button" },
+    { "type": "assertion", "description": "User is redirected to the dashboard" },
+    { "type": "action", "description": "Navigate to /units page" },
+    { "type": "assertion", "description": "Satuan Barang page is visible with a data table" },
+    { "type": "action", "description": "Click Tambah Satuan button to open create modal" },
+    { "type": "assertion", "description": "Create satuan modal is open" },
+    { "type": "action", "description": "Fill the nama field with 'Kodi Test' and simbol field with 'kd', then click Simpan" },
+    { "type": "assertion", "description": "'Kodi Test' appears in the table" },
+    { "type": "action", "description": "Click the Ubah/edit button on the 'Kodi Test' row" },
+    { "type": "assertion", "description": "Edit modal opens with current data" },
+    { "type": "action", "description": "Change the name to 'Kodi Test Updated' and click Simpan" },
+    { "type": "assertion", "description": "The satuan name is updated to 'Kodi Test Updated'" },
+    { "type": "action", "description": "Click the Hapus button on the 'Kodi Test Updated' row" },
+    { "type": "assertion", "description": "Confirmation modal appears" },
+    { "type": "action", "description": "Click confirm Hapus in the modal" },
+    { "type": "assertion", "description": "'Kodi Test Updated' is removed from the table" }
+  ]
+}

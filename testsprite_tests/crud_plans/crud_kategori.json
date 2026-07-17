@@ -1,0 +1,28 @@
+{
+  "projectId": "c72c5bf1-daa6-48e7-85dd-c1aa87103409",
+  "type": "frontend",
+  "name": "CRUD Kategori Barang - Tambah, Edit, Hapus, Filter",
+  "priority": "p0",
+  "description": "Test CRUD lengkap: tambah kategori baru, search/filter, edit nama, hapus dengan konfirmasi modal. Login admin dulu.",
+  "planSteps": [
+    { "type": "action", "description": "Navigate to /login, fill email admin@inventory.com and password password, then click the login button" },
+    { "type": "assertion", "description": "User is redirected to the dashboard page" },
+    { "type": "action", "description": "Navigate to /categories page" },
+    { "type": "assertion", "description": "Kategori Barang page is visible with a data table" },
+    { "type": "action", "description": "Click the Tambah Kategori button to open the create modal" },
+    { "type": "assertion", "description": "Create category modal is open" },
+    { "type": "action", "description": "Fill the name field with 'Kategori CRUD Test' and fill the description field" },
+    { "type": "action", "description": "Click the Simpan/Save button to submit the form" },
+    { "type": "assertion", "description": "The new category 'Kategori CRUD Test' appears in the table" },
+    { "type": "action", "description": "Type 'Kategori CRUD Test' in the search input to filter the table" },
+    { "type": "assertion", "description": "The table is filtered and shows only the matching category" },
+    { "type": "action", "description": "Click the edit/Ubah button on the 'Kategori CRUD Test' row" },
+    { "type": "assertion", "description": "Edit modal opens with current data prefilled" },
+    { "type": "action", "description": "Clear and fill the name field with 'Kategori CRUD Test Updated', then click Simpan" },
+    { "type": "assertion", "description": "The category name is updated to 'Kategori CRUD Test Updated' in the table" },
+    { "type": "action", "description": "Click the delete/Hapus button on the 'Kategori CRUD Test Updated' row" },
+    { "type": "assertion", "description": "A confirmation modal appears asking to confirm deletion" },
+    { "type": "action", "description": "Click the confirm Hapus button inside the confirmation modal" },
+    { "type": "assertion", "description": "'Kategori CRUD Test Updated' is no longer visible in the table" }
+  ]
+}
