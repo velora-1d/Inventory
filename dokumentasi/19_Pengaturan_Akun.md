@@ -26,7 +26,12 @@ Menu ini mengontrol preferensi pengguna dan fitur keamanan tingkat tinggi:
 *   Form pendaftaran PIN berisi **6 kolom input angka terpisah**.
 *   Sistem dilengkapi Javascript auto-focus ke kolom berikutnya setelah angka dimasukkan, dan kembali ke kolom sebelumnya saat menekan tombol `Backspace`.
 
-### C. Ganti Tampilan Peran (Role Switch)
+### C. Utilitas Tes Koneksi Sistem
+*   Tombol "Tes Koneksi Database TiDB": Menghubungi remote TiDB Cloud Serverless menggunakan SSL certificate (`cacert.pem`) secara real-time.
+*   Tombol "Tes Koneksi Cloud Storage S3": Menguji proses write dan delete file temporer ke RustFS/S3 storage.
+*   Status koneksi dikomunikasikan secara visual melalui **Toast Alert Banner** (warna hijau sukses, merah gagal).
+
+### D. Ganti Tampilan Peran (Role Switch)
 *   Fitur simulasi bagi Admin untuk menguji sistem dengan peran lain (Staff Gudang, Kasir, Manager).
 *   Proses pertukaran mewajibkan verifikasi PIN 6-digit.
 *   Jika berhasil ditukar, banner peringatan berwarna amber ("Mode Tampilan Role Aktif") akan muncul di bagian atas halaman dengan tombol "Kembali ke Admin".

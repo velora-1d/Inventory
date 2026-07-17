@@ -31,7 +31,14 @@ Lakukan pengujian terhadap skenario interaksi pengguna berikut:
     *   Ketik password admin, lalu masukkan 6-digit PIN (misal: `123456`) dan konfirmasi PIN.
     *   Pastikan fokus kursor berpindah otomatis ke box berikutnya setelah memasukkan 1 angka.
     *   Klik tombol "Simpan PIN".
-4.  **Skenario Tukar Peran (Role Switch):**
+5.  **Skenario Utilitas Tes Koneksi Sistem:**
+    *   Klik tombol "Tes Koneksi Database TiDB".
+    *   Pastikan tombol memunculkan indikator loading (spin).
+    *   Verifikasi bahwa Toast Alert Banner berwarna hijau muncul dengan pesan sukses koneksi database.
+    *   Klik tombol "Tes Koneksi Cloud Storage S3".
+    *   Pastikan tombol memunculkan indikator loading (spin).
+    *   Verifikasi bahwa Toast Alert Banner berwarna hijau muncul dengan pesan sukses koneksi S3/RustFS.
+6.  **Skenario Tukar Peran (Role Switch):**
     *   Pilih salah satu Role (misal: `Staff Gudang`).
     *   Masukkan PIN 6-digit yang telah didaftarkan.
     *   Klik tombol "Ganti Tampilan Peran".
