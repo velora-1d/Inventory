@@ -66,45 +66,45 @@ const submit = () => {
             <div class="relative z-10 flex flex-col h-full px-14 py-12">
                 <!-- Logo -->
                 <div class="flex items-center gap-3">
-                    <div class="h-10 w-10 rounded-xl bg-[#c8a96e] flex items-center justify-center shadow-lg">
-                        <svg class="w-5 h-5 text-[#1a1814]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="h-14 w-14 rounded-2xl bg-[#c8a96e] flex items-center justify-center shadow-lg">
+                        <svg class="w-7 h-7 text-[#1a1814]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                 d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
                         </svg>
                     </div>
-                    <span class="text-white font-bold text-xl tracking-tight">INVENTORY</span>
+                    <span class="text-white font-bold text-2xl tracking-tight">INVENTORY</span>
                 </div>
 
                 <!-- Hero -->
                 <div class="flex-1 flex flex-col justify-center max-w-md">
                     <!-- Pill badge -->
-                    <div class="inline-flex items-center gap-2 border border-white/10 bg-white/5 rounded-full px-3.5 py-1.5 mb-8 w-fit">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                        <span class="text-xs font-medium text-white/60 tracking-wide">Sistem Real-time Aktif</span>
+                    <div class="inline-flex items-center gap-2 border border-white/10 bg-white/5 rounded-full px-4 py-2 mb-9 w-fit">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span class="text-sm font-medium text-white/60 tracking-wide">Sistem Real-time Aktif</span>
                     </div>
 
-                    <h1 class="text-4xl font-extrabold text-white leading-tight tracking-tight mb-4">
+                    <h1 class="text-5xl font-extrabold text-white leading-tight tracking-tight mb-5">
                         Kelola Stok<br/>
                         <span style="color: #c8a96e;">Lebih Cerdas</span>
                     </h1>
 
-                    <p class="text-white/45 text-sm leading-relaxed mb-10">
+                    <p class="text-white/45 text-base leading-relaxed mb-12">
                         Platform manajemen inventaris dan gudang yang terintegrasi. Pantau stok, lacak mutasi, dan generate laporan dalam satu sistem.
                     </p>
 
                     <!-- Feature pills -->
-                    <div class="space-y-3">
+                    <div class="space-y-4">
                         <div v-for="(feat, i) in [
                             { icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z', label: 'Dashboard analitik real-time' },
                             { icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4', label: 'Manajemen stok multi-gudang' },
                             { icon: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9', label: 'Notifikasi stok menipis otomatis' },
-                        ]" :key="i" class="flex items-center gap-3">
-                            <div class="flex-shrink-0 w-8 h-8 rounded-lg bg-white/8 border border-white/10 flex items-center justify-center">
-                                <svg class="w-4 h-4" style="color: #c8a96e;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        ]" :key="i" class="flex items-center gap-4">
+                            <div class="flex-shrink-0 w-11 h-11 rounded-xl bg-white/8 border border-white/10 flex items-center justify-center">
+                                <svg class="w-5 h-5" style="color: #c8a96e;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="feat.icon"/>
                                 </svg>
                             </div>
-                            <span class="text-white/55 text-sm">{{ feat.label }}</span>
+                            <span class="text-white/60 text-base">{{ feat.label }}</span>
                         </div>
                     </div>
                 </div>
@@ -253,17 +253,7 @@ const submit = () => {
                     </button>
                 </form>
 
-                <!-- Register link -->
-                <div class="mt-6 pt-5 border-t border-border-warm text-center">
-                    <p class="text-sm text-text-secondary">
-                        Belum punya akun?
-                        <Link :href="route('register')"
-                            class="font-semibold text-text-primary hover:underline ml-1"
-                            style="font-size: 0.875rem;">
-                            Daftar disini
-                        </Link>
-                    </p>
-                </div>
+
             </div>
         </div>
     </div>
