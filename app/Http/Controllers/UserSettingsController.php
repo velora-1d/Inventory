@@ -86,4 +86,47 @@ class UserSettingsController extends Controller
 
         return back()->with('success', 'PIN berhasil diperbarui.');
     }
+
+    /**
+     * Test Database Connection (TiDB Cloud).
+     */
+    public function testDatabase()
+    {
+        try {
+            \Illuminate\Support\Facades\DB::connection()->getPdo();
+            return response()->json([
+                'success' => true,
+                'message' => 'Koneksi ke TiDB Cloud Database berhasil terhubung!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal terhubung ke database: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Test S3 / RustFS Connection.
+     */
+    public function testS3()
+    {
+        try {
+            $disk = \Illuminate\Support\Facades\Storage::disk('s3');
+            // Try to write and delete a small temporary file to test read/write permissions
+            $filename = 'connection_test_' . uniqid() . '.txt';
+            $disk->put($filename, 'test');
+            $disk->delete($filename);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Koneksi ke S3/RustFS Storage berhasil terhubung!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal terhubung ke S3/RustFS: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }

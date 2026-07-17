@@ -199,6 +199,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/settings/user/profile', [App\Http\Controllers\UserSettingsController::class, 'updateProfile'])->name('settings.user.profile');
     Route::patch('/settings/user/password',[App\Http\Controllers\UserSettingsController::class, 'updatePassword'])->name('settings.user.password');
     Route::patch('/settings/user/pin',     [App\Http\Controllers\UserSettingsController::class, 'updatePin'])->name('settings.user.pin');
+    Route::post('/settings/user/test-db',  [App\Http\Controllers\UserSettingsController::class, 'testDatabase'])->name('settings.user.test-db');
+    Route::post('/settings/user/test-s3',  [App\Http\Controllers\UserSettingsController::class, 'testS3'])->name('settings.user.test-s3');
 
     // ── Role Switch (super-admin only) ─────────────────────────────────────
     Route::post('/role-switch',         [App\Http\Controllers\RoleSwitchController::class, 'switch'])->middleware('role:super-admin|Admin')->name('role-switch.switch');

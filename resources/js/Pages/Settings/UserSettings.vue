@@ -74,6 +74,39 @@ const submitRestore = () => restoreForm.post(route('role-switch.restore'), {
     onSuccess: () => { restoreForm.reset(); restorePinChars.value = ['','','','','','']; },
 });
 
+import axios from 'axios';
+
+// Connection test state
+const testingDb = ref(false);
+const testingS3 = ref(false);
+const testResult = ref<{ type: 'success' | 'error'; message: string } | null>(null);
+
+const testDbConnection = async () => {
+    testingDb.value = true;
+    testResult.value = null;
+    try {
+        const response = await axios.post(route('settings.user.test-db'));
+        testResult.value = { type: 'success', message: response.data.message };
+    } catch (err: any) {
+        testResult.value = { type: 'error', message: err.response?.data?.message || 'Gagal mengetes koneksi database.' };
+    } finally {
+        testingDb.value = false;
+    }
+};
+
+const testS3Connection = async () => {
+    testingS3.value = true;
+    testResult.value = null;
+    try {
+        const response = await axios.post(route('settings.user.test-s3'));
+        testResult.value = { type: 'success', message: response.data.message };
+    } catch (err: any) {
+        testResult.value = { type: 'error', message: err.response?.data?.message || 'Gagal mengetes koneksi S3/RustFS.' };
+    } finally {
+        testingS3.value = false;
+    }
+};
+
 const roles = ['Admin', 'Staff Gudang', 'Kasir', 'Manager'];
 </script>
 
@@ -92,6 +125,57 @@ const roles = ['Admin', 'Staff Gudang', 'Kasir', 'Manager'];
                 <div class="flex-1">
                     <p class="font-semibold text-amber-800 dark:text-amber-300 text-sm">Mode Tampilan Role Aktif</p>
                     <p class="text-xs text-amber-600 dark:text-amber-400">Anda sedang melihat tampilan sebagai <strong>{{ switchedRole }}</strong>. Kembali ke Admin untuk keluar.</p>
+                </div>
+            </div>
+
+            <!-- Connection Testing Panel (Database & Cloud Storage) -->
+            <div class="mx-4 sm:mx-6 lg:mx-8 bg-surface-warm dark:bg-gray-800 rounded-2xl border border-border-warm shadow-sm p-6">
+                <h3 class="font-bold text-text-primary text-base mb-2 pb-3 border-b border-border-warm flex items-center gap-2">
+                    <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    Utilitas Tes Koneksi Sistem
+                </h3>
+                <p class="text-xs text-gray-400 mb-4">Uji koneksi secara langsung dari server aplikasi ke database remote TiDB Cloud dan Cloud Storage S3 / RustFS.</p>
+
+                <!-- Connection Results Toast Notification -->
+                <Transition enter-active-class="transition duration-300" enter-from-class="opacity-0 -translate-y-2" enter-to-class="opacity-100 translate-y-0"
+                    leave-active-class="transition duration-200" leave-from-class="opacity-100" leave-to-class="opacity-0">
+                    <div v-if="testResult" :class="[
+                        'flex items-start gap-3 rounded-xl px-4 py-3 text-sm font-medium mb-4 border',
+                        testResult.type === 'success' 
+                            ? 'bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300' 
+                            : 'bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800 text-red-700 dark:text-red-300'
+                    ]">
+                        <svg class="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path v-if="testResult.type === 'success'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div class="flex-1 break-all">
+                            {{ testResult.message }}
+                        </div>
+                        <button @click="testResult = null" class="text-xs opacity-60 hover:opacity-100 font-bold ml-1">Tutup</button>
+                    </div>
+                </Transition>
+
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <button @click="testDbConnection" :disabled="testingDb || testingS3"
+                        class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold rounded-xl text-white bg-gray-900 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200 transition-all active:scale-95 disabled:opacity-50">
+                        <svg v-if="testingDb" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+                        {{ testingDb ? 'Mengetes TiDB...' : 'Tes Koneksi Database TiDB' }}
+                    </button>
+
+                    <button @click="testS3Connection" :disabled="testingDb || testingS3"
+                        class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold rounded-xl text-white bg-orange-600 hover:bg-orange-700 transition-all active:scale-95 disabled:opacity-50">
+                        <svg v-if="testingS3" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
+                        {{ testingS3 ? 'Mengetes RustFS...' : 'Tes Koneksi Cloud Storage S3' }}
+                    </button>
                 </div>
             </div>
 
