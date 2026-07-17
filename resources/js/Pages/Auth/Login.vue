@@ -183,14 +183,7 @@ const submit = () => {
 
                     <!-- Password -->
                     <div class="space-y-1.5">
-                        <div class="flex items-center justify-between">
-                            <label for="password" style="margin-bottom: 0 !important;">Kata Sandi</label>
-                            <Link v-if="canResetPassword" :href="route('password.request')"
-                                class="text-xs font-semibold text-text-primary hover:underline opacity-70 hover:opacity-100 transition-opacity"
-                                style="text-transform: none; font-size: 0.75rem; letter-spacing: 0; font-weight: 600;">
-                                Lupa sandi?
-                            </Link>
-                        </div>
+                        <label for="password" style="margin-bottom: 0 !important;">Kata Sandi</label>
                         <div class="relative">
                             <span class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
                                 <svg class="w-4 h-4 text-text-secondary opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
