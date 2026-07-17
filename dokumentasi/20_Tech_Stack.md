@@ -16,6 +16,9 @@ Aplikasi ini dibangun menggunakan arsitektur monolitik modern berbasis PHP denga
     *   **ACID Compliance:** Memanfaatkan fitur `DB::transaction()` untuk menjamin *Atomicity* dan `.lockForUpdate()` (Row-Level Locking) pada tabel `stocks` untuk menjamin tingkat *Isolation* yang tinggi dari *race conditions*.
 *   **Otorisasi & Keamanan Pengguna:**
     *   **Spatie Laravel Permission ^8.3:** Menangani implementasi *Role-Based Access Control* (RBAC) secara dinamis melalui pemetaan *Role & Permission Matrix*.
+*   **Media & Cloud Storage Integration:**
+    *   **Intervention Image ^4.2 (dengan GD Driver):** Digunakan untuk mengotomatiskan kompresi dan konversi format upload foto produk menjadi WebP (maksimum lebar 800px, kualitas 80%).
+    *   **League Flysystem AWS S3 ^3.35:** Adapter driver untuk mengintegrasikan penyimpanan awan (S3 API compatible) seperti **RustFS**, Cloudflare R2, atau MinIO secara transparan tanpa mengubah baris kode.
 *   **Helper & Routing Frontend:**
     *   **Ziggy ^2.0:** Mentransfer route Laravel secara langsung ke file Javascript/Vue, sehingga rute backend dapat dipanggil menggunakan helper `route('nama.rute')` di frontend.
 
@@ -74,3 +77,18 @@ graph LR
     Laravel --> Spatie
     Laravel <===>|Eloquent ORM / ACID Transactions| DB
 ```
+
+---
+
+## 5. DOCKER DEPLOYMENT ENVIRONMENT
+Aplikasi ini dikemas menggunakan Docker Container untuk kemudahan portabilitas deployment:
+
+*   **Dockerfile (Multi-Stage Build):**
+    *   *Stage 1:* Node.js 20-alpine untuk compile & build asset frontend (Vite & Tailwind CSS v4).
+    *   *Stage 2:* PHP 8.3-fpm-alpine terintegrasi Nginx dan Supervisor sebagai server produksi utama. GD extension dikonfigurasi dengan dukungan `freetype`, `jpeg`, dan `webp`.
+*   **Docker Compose:**
+    *   `app` container (web server & Laravel framework di port `8000`).
+    *   `db` container (MySQL 8.0 server di port `3306`).
+*   **Database Entrypoint Automation:**
+    *   Menyertakan script [entrypoint.sh](file:///etc/entrypoint.sh) yang otomatis mendeteksi koneksi database dan menjalankan migrasi (`php artisan migrate --force`).
+    *   **Keamanan Data:** Sistem melakukan cek eksistensi data (`User::count()`). Seeder hanya akan dijalankan jika database dalam kondisi kosong (Fresh Setup) untuk menghindari penumpukan seeder atau penghapusan data lama (`truncate`) saat kontainer di-restart.
