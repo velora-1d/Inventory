@@ -22,6 +22,7 @@ use App\Http\Controllers\Reports\LowStockController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\NotificationSettingController;
+use App\Http\Controllers\WattVisionController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -200,6 +201,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // ── Role Switch (super-admin only) ─────────────────────────────────────
     Route::post('/role-switch',         [App\Http\Controllers\RoleSwitchController::class, 'switch'])->middleware('role:super-admin|Admin')->name('role-switch.switch');
     Route::post('/role-switch/restore', [App\Http\Controllers\RoleSwitchController::class, 'restore'])->middleware('role:super-admin|Admin')->name('role-switch.restore');
+
+    // ── WattVision Dashboard ────────────────────────────────────────────────
+    Route::get('/wattvision', [WattVisionController::class, 'index'])->name('wattvision.index');
 });
 
 require __DIR__.'/auth.php';
