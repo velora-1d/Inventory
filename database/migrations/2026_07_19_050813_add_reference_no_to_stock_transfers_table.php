@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('stock_transfers', function (Blueprint $table) {
-            $table->string('reference_no', 100)->nullable()->after('to_warehouse_id');
-        });
+        if (!Schema::hasColumn('stock_transfers', 'reference_no')) {
+            Schema::table('stock_transfers', function (Blueprint $table) {
+                $table->string('reference_no', 100)->nullable()->after('to_warehouse_id');
+            });
+        }
     }
 
     /**
@@ -21,8 +23,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('stock_transfers', function (Blueprint $table) {
-            $table->dropColumn('reference_no');
-        });
+        if (Schema::hasColumn('stock_transfers', 'reference_no')) {
+            Schema::table('stock_transfers', function (Blueprint $table) {
+                $table->dropColumn('reference_no');
+            });
+        }
     }
 };

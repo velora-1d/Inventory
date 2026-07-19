@@ -359,7 +359,7 @@ class InventoryMasterSeeder extends Seeder
         $stockOut1Id = DB::table('stock_outs')->insertGetId([
             'transaction_no' => 'BK-20260712-0001',
             'transaction_date' => '2026-07-12',
-            'destination' => 'Retail Toko Utama',
+            'recipient' => 'Retail Toko Utama',
             'warehouse_id' => $gudangUtamaId,
             'reference_no' => 'REQ/TOKO/8821',
             'notes' => 'Pengiriman barang ke unit retail',
@@ -378,7 +378,7 @@ class InventoryMasterSeeder extends Seeder
         $stockOut2Id = DB::table('stock_outs')->insertGetId([
             'transaction_no' => 'BK-20260716-0002',
             'transaction_date' => '2026-07-16',
-            'destination' => 'Project Office Bandung',
+            'recipient' => 'Project Office Bandung',
             'warehouse_id' => $gudangUtamaId,
             'reference_no' => 'REQ/PROJ/009',
             'notes' => 'Permintaan keyboard proyek Bandung',

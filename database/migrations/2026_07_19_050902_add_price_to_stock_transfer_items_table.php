@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('stock_transfer_items', function (Blueprint $table) {
-            $table->decimal('price', 15, 2)->nullable()->after('qty_base_unit');
-        });
+        if (!Schema::hasColumn('stock_transfer_items', 'price')) {
+            Schema::table('stock_transfer_items', function (Blueprint $table) {
+                $table->decimal('price', 15, 2)->nullable()->after('qty_base_unit');
+            });
+        }
     }
 
     /**
@@ -21,8 +23,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('stock_transfer_items', function (Blueprint $table) {
-            $table->dropColumn('price');
-        });
+        if (Schema::hasColumn('stock_transfer_items', 'price')) {
+            Schema::table('stock_transfer_items', function (Blueprint $table) {
+                $table->dropColumn('price');
+            });
+        }
     }
 };
