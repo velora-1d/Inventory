@@ -1,0 +1,26 @@
+{
+  "projectId": "c72c5bf1-daa6-48e7-85dd-c1aa87103409",
+  "type": "frontend",
+  "name": "CRUD Retur Barang - Tambah, Filter Supplier, Filter Tanggal, Hapus",
+  "priority": "p0",
+  "description": "Test CRUD retur barang: buat retur, filter, hapus. Login admin.",
+  "planSteps": [
+    { "type": "action", "description": "Navigate to /login, fill email admin@inventory.com and password password, click login" },
+    { "type": "assertion", "description": "User is redirected to dashboard" },
+    { "type": "action", "description": "Click Retur Barang menu in the sidebar" },
+    { "type": "assertion", "description": "Retur Barang page is visible with return transaction list" },
+    { "type": "action", "description": "Click Buat Retur button" },
+    { "type": "assertion", "description": "Create return form or modal is open" },
+    { "type": "action", "description": "Click the Retur Keluar button to select return out type" },
+    { "type": "action", "description": "Select a warehouse from the Gudang dropdown" },
+    { "type": "action", "description": "Click the Tambah Baris button to add an item row" },
+    { "type": "action", "description": "Select a product from the first -- Pilih Barang -- dropdown in the table" },
+    { "type": "action", "description": "Fill the quantity input in the table with 1" },
+    { "type": "action", "description": "Click the Simpan Draft Retur button" },
+    { "type": "assertion", "description": "New return transaction appears in the list table with Draft status" },
+    { "type": "action", "description": "Click the delete/Hapus button on the draft transaction that was just created" },
+    { "type": "assertion", "description": "A confirmation modal or dialog appears asking to confirm deletion" },
+    { "type": "action", "description": "Confirm the deletion" },
+    { "type": "assertion", "description": "Return is removed from the list" }
+  ]
+}

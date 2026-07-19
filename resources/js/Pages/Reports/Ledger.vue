@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { formatNumber, formatCurrency } from '@/utils/format';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
@@ -57,7 +58,7 @@ const typeConfig: Record<string, { label: string; color: string }> = {
     return_out:   { label: 'Retur Keluar',   color: 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300' },
 };
 const getType = (t: string) => typeConfig[t] ?? { label: t, color: 'bg-gray-100 text-gray-600' };
-const formatNumber = (n: number) => new Intl.NumberFormat('id-ID').format(n ?? 0);
+
 const formatDate   = (d: string) => new Date(d).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
 
 const triggerExport = (format: 'excel' | 'docs' | 'pdf') => {

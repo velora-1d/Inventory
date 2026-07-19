@@ -9,6 +9,9 @@ use App\Models\Warehouse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\Encoders\WebpEncoder;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -90,20 +93,21 @@ class ProductController extends Controller
             $file = $request->file('photo_file');
             
             // Auto optimize using Intervention Image (v3+)
-            $manager = \Intervention\Image\ImageManager::gd();
-            $image = $manager->read($file);
+            $manager = new ImageManager(new Driver());
+            $image = $manager->decode($file);
             
-            // Resize image to maximum width of 800px preserving aspect ratio
-            $image->scale(width: 800);
+            // Crop and resize image to exactly 800x800 pixels (1:1 square ratio)
+            $image->cover(800, 800);
             
             // Encode as WebP format with 80% compression quality
-            $encoded = $image->toWebp(80);
+            $encoded = $image->encode(new WebpEncoder(quality: 80));
             
-            // Save to storage public disk
+            // Save to storage public or S3 disk
+            $disk = Storage::disk(config('filesystems.default'));
             $filename = 'products/' . uniqid() . '.webp';
-            Storage::disk('public')->put($filename, $encoded->toString());
+            $disk->put($filename, $encoded->toString());
             
-            $validated['photo'] = Storage::url($filename);
+            $validated['photo'] = $disk->url($filename);
         }
 
         // Set average price equals purchase price initially
@@ -119,6 +123,13 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product): RedirectResponse
     {
+        \Illuminate\Support\Facades\Log::info('Update Request Data: ' . json_encode($request->except(['photo_file'])));
+        if ($request->hasFile('photo_file')) {
+            \Illuminate\Support\Facades\Log::info('Update Request has photo_file: ' . $request->file('photo_file')->getClientOriginalName());
+        } else {
+            \Illuminate\Support\Facades\Log::info('Update Request has NO photo_file');
+        }
+
         // For multipart form-data PUT request workaround in Laravel (often parsed as POST with _method=PUT)
         $validated = $request->validate([
             'sku' => 'required|string|max:50|unique:products,sku,' . $product->id,
@@ -140,29 +151,36 @@ class ProductController extends Controller
 
         // Handle photo upload with auto-optimization
         if ($request->hasFile('photo_file')) {
+            $disk = Storage::disk(config('filesystems.default'));
+            
             // Delete old photo if it exists
             if ($product->photo) {
-                $oldPath = str_replace('/storage/', '', $product->photo);
-                Storage::disk('public')->delete($oldPath);
+                $path = parse_url($product->photo, PHP_URL_PATH);
+                if (str_starts_with($path, '/storage/')) {
+                    $path = substr($path, 9);
+                } else {
+                    $path = ltrim($path, '/');
+                }
+                $disk->delete($path);
             }
 
             $file = $request->file('photo_file');
             
             // Auto optimize using Intervention Image (v3+)
-            $manager = \Intervention\Image\ImageManager::gd();
-            $image = $manager->read($file);
+            $manager = new ImageManager(new Driver());
+            $image = $manager->decode($file);
             
-            // Resize image to maximum width of 800px preserving aspect ratio
-            $image->scale(width: 800);
+            // Crop and resize image to exactly 800x800 pixels (1:1 square ratio)
+            $image->cover(800, 800);
             
             // Encode as WebP format with 80% compression quality
-            $encoded = $image->toWebp(80);
+            $encoded = $image->encode(new WebpEncoder(quality: 80));
             
-            // Save to storage public disk
+            // Save to storage public or S3 disk
             $filename = 'products/' . uniqid() . '.webp';
-            Storage::disk('public')->put($filename, $encoded->toString());
+            $disk->put($filename, $encoded->toString());
             
-            $validated['photo'] = Storage::url($filename);
+            $validated['photo'] = $disk->url($filename);
         }
 
         $product->update($validated);
@@ -183,8 +201,13 @@ class ProductController extends Controller
 
         // Delete photo from storage if exists
         if ($product->photo) {
-            $path = str_replace('/storage/', '', $product->photo);
-            Storage::disk('public')->delete($path);
+            $path = parse_url($product->photo, PHP_URL_PATH);
+            if (str_starts_with($path, '/storage/')) {
+                $path = substr($path, 9);
+            } else {
+                $path = ltrim($path, '/');
+            }
+            Storage::disk(config('filesystems.default'))->delete($path);
         }
 
         $product->delete();

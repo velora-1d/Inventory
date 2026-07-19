@@ -13,6 +13,9 @@ class StockReturnItem extends Model
         'unit_id',
         'qty',
         'qty_base_unit',
+        'price',
+        'subtotal',
+        'condition',
         'notes'
     ];
 

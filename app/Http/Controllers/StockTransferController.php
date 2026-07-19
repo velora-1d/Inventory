@@ -290,7 +290,6 @@ class StockTransferController extends Controller
             'items.*.product_id' => 'required|exists:products,id',
             'items.*.unit_id'    => 'required|exists:units,id',
             'items.*.qty'        => 'required|numeric|min:0.01',
-            'items.*.price'      => 'required|numeric|min:0',
         ]);
 
         DB::transaction(function () use ($request, $stockTransfer) {
@@ -313,8 +312,6 @@ class StockTransferController extends Controller
                     'unit_id'       => $item['unit_id'],
                     'qty'           => $item['qty'],
                     'qty_base_unit' => $qtyBase,
-                    'price'         => $item['price'],
-                    'subtotal'      => $item['qty'] * $item['price'],
                 ]);
             }
         });

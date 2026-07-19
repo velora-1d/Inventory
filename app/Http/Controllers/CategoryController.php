@@ -40,7 +40,7 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): mixed
     {
         $validated = $request->validate([
             'name' => 'required|string|max:100|unique:categories,name',
@@ -50,7 +50,15 @@ class CategoryController extends Controller
             'name.unique' => 'Nama kategori sudah digunakan.',
         ]);
 
-        Category::create($validated);
+        $category = Category::create($validated);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'data' => $category,
+                'message' => 'Kategori berhasil ditambahkan.'
+            ]);
+        }
 
         return redirect()->route('categories.index')->with('success', 'Kategori berhasil ditambahkan.');
     }
@@ -76,14 +84,27 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category): RedirectResponse
+    public function destroy(Category $category): mixed
     {
         // Check if there are active products using this category
         if ($category->products()->count() > 0) {
+            if (request()->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Kategori tidak dapat dihapus karena masih digunakan oleh produk.'
+                ], 422);
+            }
             return redirect()->route('categories.index')->with('error', 'Kategori tidak dapat dihapus karena masih digunakan oleh produk.');
         }
 
         $category->delete();
+
+        if (request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Kategori berhasil dihapus.'
+            ]);
+        }
 
         return redirect()->route('categories.index')->with('success', 'Kategori berhasil dihapus.');
     }

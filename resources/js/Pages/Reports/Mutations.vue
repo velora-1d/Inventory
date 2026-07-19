@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { formatNumber, formatCurrency } from '@/utils/format';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
@@ -40,7 +41,7 @@ const applyFilters = () => {
     }, { preserveState: true, replace: true });
 };
 
-const formatNumber = (n: number) => new Intl.NumberFormat('id-ID').format(n ?? 0);
+
 const netClass = (n: number) => n > 0 ? 'text-emerald-600 dark:text-emerald-400' : n < 0 ? 'text-rose-600 dark:text-rose-400' : 'text-gray-400';
 
 const triggerExport = (format: 'excel' | 'docs' | 'pdf') => {

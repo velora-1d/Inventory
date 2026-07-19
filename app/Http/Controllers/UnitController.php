@@ -40,7 +40,7 @@ class UnitController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): mixed
     {
         $validated = $request->validate([
             'name' => 'required|string|max:50|unique:units,name',
@@ -51,7 +51,15 @@ class UnitController extends Controller
             'symbol.unique' => 'Simbol satuan sudah digunakan.',
         ]);
 
-        Unit::create($validated);
+        $unit = Unit::create($validated);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'data' => $unit,
+                'message' => 'Satuan berhasil ditambahkan.'
+            ]);
+        }
 
         return redirect()->route('units.index')->with('success', 'Satuan berhasil ditambahkan.');
     }
@@ -78,7 +86,7 @@ class UnitController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Unit $unit): RedirectResponse
+    public function destroy(Unit $unit): mixed
     {
         // Check if there are active products using this unit as base/purchase/sale unit
         $inUse = \App\Models\Product::where('base_unit_id', $unit->id)
@@ -87,10 +95,23 @@ class UnitController extends Controller
             ->exists();
 
         if ($inUse) {
+            if (request()->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Satuan tidak dapat dihapus karena sedang digunakan oleh produk.'
+                ], 422);
+            }
             return redirect()->route('units.index')->with('error', 'Satuan tidak dapat dihapus karena sedang digunakan oleh produk.');
         }
 
         $unit->delete();
+
+        if (request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Satuan berhasil dihapus.'
+            ]);
+        }
 
         return redirect()->route('units.index')->with('success', 'Satuan berhasil dihapus.');
     }

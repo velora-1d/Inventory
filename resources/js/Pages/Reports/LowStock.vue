@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { formatNumber, formatCurrency } from '@/utils/format';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
@@ -38,7 +39,7 @@ const applyFilters = () => {
     }, { preserveState: true, replace: true });
 };
 
-const formatNumber = (n: number) => new Intl.NumberFormat('id-ID').format(n ?? 0);
+
 
 const stockClass = (qty: number) => qty === 0
     ? 'text-red-600 dark:text-red-400 font-bold'

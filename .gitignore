@@ -33,3 +33,10 @@ Thumbs.db
 /playwright/.cache/
 
 testsprite_tests/tmp/config.json
+
+# Agent specific files
+.agents/
+.claude/
+AGENTS.md
+CLAUDE.md
+/public/vendor/

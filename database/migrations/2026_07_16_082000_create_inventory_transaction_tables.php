@@ -42,7 +42,7 @@ return new class extends Migration
             $table->id();
             $table->string('transaction_no', 50)->unique();
             $table->date('transaction_date');
-            $table->string('destination', 150)->nullable();
+            $table->string('recipient', 150)->nullable();
             $table->foreignId('warehouse_id')->constrained('warehouses');
             $table->string('reference_no', 50)->nullable();
             $table->text('notes')->nullable();
@@ -70,6 +70,7 @@ return new class extends Migration
             $table->date('transaction_date');
             $table->foreignId('from_warehouse_id')->constrained('warehouses');
             $table->foreignId('to_warehouse_id')->constrained('warehouses');
+            $table->string('reference_no', 100)->nullable();
             $table->text('notes')->nullable();
             $table->enum('status', ['draft', 'completed'])->default('draft');
             $table->foreignId('created_by')->constrained('users');
@@ -83,6 +84,7 @@ return new class extends Migration
             $table->foreignId('unit_id')->constrained('units');
             $table->decimal('qty', 15, 2);
             $table->decimal('qty_base_unit', 15, 2);
+            $table->decimal('price', 15, 2)->nullable();
             $table->timestamps();
         });
 

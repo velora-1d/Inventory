@@ -83,7 +83,6 @@ class StockOpnameController extends Controller
             'notes'        => 'nullable|string|max:500',
             'items'        => 'required|array|min:1',
             'items.*.product_id'   => 'required|exists:products,id',
-            'items.*.unit_id'      => 'required|exists:units,id',
             'items.*.system_qty'   => 'required|numeric|min:0',
             'items.*.physical_qty' => 'required|numeric|min:0',
             'items.*.notes'        => 'nullable|string|max:200',
@@ -103,7 +102,6 @@ class StockOpnameController extends Controller
                 $diff = $item['physical_qty'] - $item['system_qty'];
                 $opname->items()->create([
                     'product_id'   => $item['product_id'],
-                    'unit_id'      => $item['unit_id'],
                     'system_qty'   => $item['system_qty'],
                     'physical_qty' => $item['physical_qty'],
                     'difference'   => $diff,
@@ -239,7 +237,6 @@ class StockOpnameController extends Controller
             'notes'        => 'nullable|string|max:500',
             'items'        => 'required|array|min:1',
             'items.*.product_id'   => 'required|exists:products,id',
-            'items.*.unit_id'      => 'required|exists:units,id',
             'items.*.system_qty'   => 'required|numeric|min:0',
             'items.*.physical_qty' => 'required|numeric|min:0',
             'items.*.notes'        => 'nullable|string|max:200',
@@ -258,7 +255,6 @@ class StockOpnameController extends Controller
                 $diff = $item['physical_qty'] - $item['system_qty'];
                 $stockOpname->items()->create([
                     'product_id'   => $item['product_id'],
-                    'unit_id'      => $item['unit_id'],
                     'system_qty'   => $item['system_qty'],
                     'physical_qty' => $item['physical_qty'],
                     'difference'   => $diff,

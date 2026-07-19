@@ -3,6 +3,8 @@ import { ref } from 'vue';
 export interface ConfirmState {
     isOpen: boolean;
     message: string;
+    isAlert?: boolean;
+    title?: string;
     onConfirm: (() => void) | null;
     onCancel: (() => void) | null;
 }
@@ -10,6 +12,8 @@ export interface ConfirmState {
 export const confirmState = ref<ConfirmState>({
     isOpen: false,
     message: '',
+    isAlert: false,
+    title: '',
     onConfirm: null,
     onCancel: null,
 });
@@ -19,6 +23,8 @@ export const showConfirm = (message: string): Promise<boolean> => {
         confirmState.value = {
             isOpen: true,
             message,
+            isAlert: false,
+            title: 'Konfirmasi Tindakan',
             onConfirm: () => {
                 confirmState.value.isOpen = false;
                 resolve(true);
@@ -31,6 +37,26 @@ export const showConfirm = (message: string): Promise<boolean> => {
     });
 };
 
+export const showAlert = (message: string, title: string = 'Peringatan'): Promise<void> => {
+    return new Promise<void>((resolve) => {
+        confirmState.value = {
+            isOpen: true,
+            message,
+            isAlert: true,
+            title,
+            onConfirm: () => {
+                confirmState.value.isOpen = false;
+                resolve();
+            },
+            onCancel: () => {
+                confirmState.value.isOpen = false;
+                resolve();
+            },
+        };
+    });
+};
+
 if (typeof window !== 'undefined') {
     (window as any).showConfirm = showConfirm;
+    (window as any).showAlert = showAlert;
 }

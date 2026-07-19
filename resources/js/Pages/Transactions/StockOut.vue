@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { formatNumber, formatCurrency } from '@/utils/format';
 import { showConfirm } from '@/confirm';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
@@ -239,7 +240,7 @@ const deleteTransaction = async (id: number) => {
     router.delete(route('stock-outs.destroy', id));
 };
 
-const formatNumber = (n: number) => new Intl.NumberFormat('id-ID').format(n ?? 0);
+
 const statusBadge = (status: string) =>
     status === 'completed'
         ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300'

@@ -28,6 +28,33 @@ const toggleMobileSidebar = () => {
 const page = usePage();
 const user = page.props.auth.user;
 
+// Notification Toast State
+const toast = ref<{ show: boolean; message: string; type: 'success' | 'error' }>({
+    show: false,
+    message: '',
+    type: 'success',
+});
+
+const showToast = (message: string, type: 'success' | 'error') => {
+    toast.value = { show: true, message, type };
+    setTimeout(() => {
+        toast.value.show = false;
+    }, 5000);
+};
+
+// Watch for flash messages from backend
+watch(
+    () => page.props.flash,
+    (flash: any) => {
+        if (flash?.success) {
+            showToast(flash.success, 'success');
+        } else if (flash?.error) {
+            showToast(flash.error, 'error');
+        }
+    },
+    { deep: true, immediate: true }
+);
+
 const hasPermission = (permission: string): boolean => {
     const perms = (page.props.auth as any).permissions as string[] ?? [];
     const roles = (page.props.auth as any).roles as string[] ?? [];
@@ -334,26 +361,70 @@ const menuGroups = [
             <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" @click="cancelConfirm"></div>
             <div class="bg-surface-warm border border-border-warm rounded-xl max-w-sm w-full shadow-2xl overflow-hidden relative z-10 p-6 space-y-4">
                 <div class="flex items-start space-x-3">
-                    <div class="p-2 bg-amber-50 dark:bg-amber-950/20 text-amber-600 dark:text-amber-400 rounded-lg">
+                    <div class="p-2 rounded-lg" :class="confirmState.isAlert ? 'bg-rose-50 dark:bg-rose-950/20 text-rose-600 dark:text-rose-450' : 'bg-amber-50 dark:bg-amber-950/20 text-amber-600 dark:text-amber-400'">
                         <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <!-- Alert/Warning Icon -->
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                         </svg>
                     </div>
-                    <div class="space-y-1">
-                        <h4 class="font-bold text-text-primary text-base">Konfirmasi Tindakan</h4>
+                    <div class="space-y-1 flex-1">
+                        <h4 class="font-bold text-text-primary text-base">{{ confirmState.title || 'Konfirmasi Tindakan' }}</h4>
                         <p class="text-sm text-text-secondary">{{ confirmState.message }}</p>
                     </div>
                 </div>
                 <div class="flex justify-end space-x-2 pt-2">
-                    <button @click="cancelConfirm" class="px-3.5 py-2 rounded-lg bg-surface-raised hover:bg-border-warm text-text-secondary text-sm font-semibold transition-colors">
+                    <button v-if="!confirmState.isAlert" @click="cancelConfirm" class="px-3.5 py-2 rounded-lg bg-surface-raised hover:bg-border-warm text-text-secondary text-sm font-semibold transition-colors">
                         Batal
                     </button>
-                    <button @click="executeConfirm" class="px-3.5 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-semibold transition-colors">
-                        Ya, Lanjutkan
+                    <button @click="executeConfirm" class="px-3.5 py-2 rounded-lg text-white text-sm font-semibold transition-colors" :class="confirmState.isAlert ? 'bg-slate-700 hover:bg-slate-800' : 'bg-red-600 hover:bg-red-700'">
+                        {{ confirmState.isAlert ? 'Tutup' : 'Ya, Lanjutkan' }}
                     </button>
                 </div>
             </div>
         </div>
+
+        <!-- Global Toast Notification Banner -->
+        <transition
+            enter-active-class="transform ease-out duration-300 transition"
+            enter-from-class="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
+            enter-to-class="translate-y-0 opacity-100 sm:translate-x-0"
+            leave-active-class="transition ease-in duration-100"
+            leave-from-class="opacity-100"
+            leave-to-class="opacity-0"
+        >
+            <div v-if="toast.show" class="fixed bottom-4 right-4 z-50 max-w-sm w-full bg-white dark:bg-slate-800 border rounded-xl shadow-lg pointer-events-auto overflow-hidden" :class="toast.type === 'success' ? 'border-emerald-500' : 'border-rose-500'">
+                <div class="p-4">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <!-- Success Icon -->
+                            <svg v-if="toast.type === 'success'" class="h-6 w-6 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <!-- Error Icon -->
+                            <svg v-else class="h-6 w-6 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div class="ml-3 w-0 flex-1 pt-0.5">
+                            <p class="text-sm font-semibold text-slate-900 dark:text-white">
+                                {{ toast.type === 'success' ? 'Berhasil' : 'Gagal' }}
+                            </p>
+                            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                                {{ toast.message }}
+                            </p>
+                        </div>
+                        <div class="ml-4 flex-shrink-0 flex">
+                            <button @click="toast.show = false" class="bg-transparent rounded-md inline-flex text-slate-400 hover:text-slate-500 focus:outline-none">
+                                <span class="sr-only">Tutup</span>
+                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </transition>
     </div>
 </template>
 

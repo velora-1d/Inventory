@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { formatNumber, formatCurrency } from '@/utils/format';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { ref, watch, computed } from 'vue';
@@ -122,18 +123,9 @@ watch(warehouseFilter, () => {
 });
 
 // Format Currency
-const formatIDR = (value: number) => {
-    return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-        minimumFractionDigits: 0
-    }).format(value);
-};
 
-const formatNumber = (value: number) => {
-    if (value < 1000) return value.toString();
-    return new Intl.NumberFormat('id-ID').format(value);
-};
+
+
 
 // Get type styling for transaction badges
 const getTransactionBadgeClass = (type: string) => {
@@ -232,7 +224,7 @@ const getTransactionLabel = (type: string) => {
                         Nilai Persediaan
                     </p>
                     <h3 class="text-2xl font-extrabold text-text-primary">
-                        {{ formatIDR(stats.total_value) }}
+                        {{ formatCurrency(stats.total_value) }}
                     </h3>
                     <p class="text-[11px] text-text-secondary mt-0.5">
                         Valuasi metode Average.

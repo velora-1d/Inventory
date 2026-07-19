@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { formatNumber, formatCurrency } from '@/utils/format';
 import { showConfirm } from '@/confirm';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
@@ -194,7 +195,7 @@ const deleteOpname = async (id: number) => {
 
 const productName = (id: number) => props.products.find(p => p.id === id)?.name ?? '-';
 const unitSymbol  = (id: number) => props.units.find(u => u.id === id)?.symbol ?? '-';
-const formatNumber = (n: number) => new Intl.NumberFormat('id-ID').format(n ?? 0);
+
 const statusBadge = (s: string) => s === 'completed'
     ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300'
     : 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300';

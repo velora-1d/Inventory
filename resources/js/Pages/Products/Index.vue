@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { showConfirm } from '@/confirm';
+import { formatNumber, formatCurrency } from '@/utils/format';
+import { showConfirm, showAlert } from '@/confirm';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, useForm, router, Link } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+import axios from 'axios';
 
 defineOptions({ layout: AuthenticatedLayout });
 
@@ -70,6 +72,198 @@ const props = defineProps<{
         status?: string;
     };
 }>();
+
+// Reactive local copies of categories and units list
+const localCategories = ref<Category[]>([...props.categories]);
+const localUnits = ref<Unit[]>([...props.units]);
+
+// Keep local copies in sync if props update
+watch(() => props.categories, (newVal) => {
+    localCategories.value = [...newVal];
+}, { deep: true });
+
+watch(() => props.units, (newVal) => {
+    localUnits.value = [...newVal];
+}, { deep: true });
+
+// Quick Category Modal State
+const isCatModalOpen = ref(false);
+const quickCatForm = ref({
+    name: '',
+    description: '',
+    status: 'active' as 'active' | 'inactive',
+    errors: {} as Record<string, string>,
+    isSubmitting: false,
+});
+
+const openQuickCatModal = () => {
+    quickCatForm.value = {
+        name: '',
+        description: '',
+        status: 'active',
+        errors: {},
+        isSubmitting: false,
+    };
+    isCatModalOpen.value = true;
+};
+
+const closeQuickCatModal = () => {
+    isCatModalOpen.value = false;
+};
+
+const submitQuickCategory = async () => {
+    quickCatForm.value.errors = {};
+    if (!quickCatForm.value.name.trim()) {
+        quickCatForm.value.errors.name = 'Nama kategori wajib diisi.';
+        return;
+    }
+    quickCatForm.value.isSubmitting = true;
+    try {
+        const response = await axios.post(route('categories.store'), {
+            name: quickCatForm.value.name,
+            description: quickCatForm.value.description,
+            status: quickCatForm.value.status,
+        }, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        });
+        
+        if (response.data && response.data.data) {
+            const newCat = response.data.data;
+            localCategories.value.push(newCat);
+            form.category_id = newCat.id; // Auto select newly created category
+            closeQuickCatModal();
+        }
+    } catch (error: any) {
+        if (error.response?.data?.errors) {
+            quickCatForm.value.errors = error.response.data.errors;
+        } else {
+            quickCatForm.value.errors.name = error.response?.data?.message || 'Terjadi kesalahan saat menyimpan kategori.';
+        }
+    } finally {
+        quickCatForm.value.isSubmitting = false;
+    }
+};
+
+// Quick Unit Modal State
+const isUnitModalOpen = ref(false);
+const quickUnitForm = ref({
+    name: '',
+    symbol: '',
+    status: 'active' as 'active' | 'inactive',
+    errors: {} as Record<string, string>,
+    isSubmitting: false,
+});
+
+const openQuickUnitModal = () => {
+    quickUnitForm.value = {
+        name: '',
+        symbol: '',
+        status: 'active',
+        errors: {},
+        isSubmitting: false,
+    };
+    isUnitModalOpen.value = true;
+};
+
+const closeQuickUnitModal = () => {
+    isUnitModalOpen.value = false;
+};
+
+const submitQuickUnit = async () => {
+    quickUnitForm.value.errors = {};
+    let hasErr = false;
+    if (!quickUnitForm.value.name.trim()) {
+        quickUnitForm.value.errors.name = 'Nama satuan wajib diisi.';
+        hasErr = true;
+    }
+    if (!quickUnitForm.value.symbol.trim()) {
+        quickUnitForm.value.errors.symbol = 'Simbol satuan wajib diisi.';
+        hasErr = true;
+    }
+    if (hasErr) return;
+
+    quickUnitForm.value.isSubmitting = true;
+    try {
+        const response = await axios.post(route('units.store'), {
+            name: quickUnitForm.value.name,
+            symbol: quickUnitForm.value.symbol,
+            status: quickUnitForm.value.status,
+        }, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (response.data && response.data.data) {
+            const newUnit = response.data.data;
+            localUnits.value.push(newUnit);
+            form.base_unit_id = newUnit.id; // Auto select newly created base unit
+            closeQuickUnitModal();
+        }
+    } catch (error: any) {
+        if (error.response?.data?.errors) {
+            quickUnitForm.value.errors = error.response.data.errors;
+        } else {
+            quickUnitForm.value.errors.name = error.response?.data?.message || 'Terjadi kesalahan saat menyimpan satuan.';
+        }
+    } finally {
+        quickUnitForm.value.isSubmitting = false;
+    }
+};
+
+const deleteQuickCategory = async () => {
+    const catId = form.category_id;
+    if (!catId) return;
+
+    const category = localCategories.value.find(c => c.id === Number(catId));
+    const categoryName = category ? category.name : 'kategori ini';
+
+    if (await showConfirm(`Apakah Anda yakin ingin menghapus kategori "${categoryName}" secara permanen?`)) {
+        try {
+            const response = await axios.delete(route('categories.destroy', catId), {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            if (response.data && response.data.success) {
+                localCategories.value = localCategories.value.filter(c => c.id !== Number(catId));
+                form.category_id = ''; // reset selection
+            }
+        } catch (error: any) {
+            const errMsg = error.response?.data?.message || 'Gagal menghapus kategori.';
+            showAlert(errMsg);
+        }
+    }
+};
+
+const deleteQuickUnit = async () => {
+    const unitId = form.base_unit_id;
+    if (!unitId) return;
+
+    const unit = localUnits.value.find(u => u.id === Number(unitId));
+    const unitName = unit ? `${unit.name} (${unit.symbol})` : 'satuan ini';
+
+    if (await showConfirm(`Apakah Anda yakin ingin menghapus satuan "${unitName}" secara permanen?`)) {
+        try {
+            const response = await axios.delete(route('units.destroy', unitId), {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            if (response.data && response.data.success) {
+                localUnits.value = localUnits.value.filter(u => u.id !== Number(unitId));
+                form.base_unit_id = ''; // reset selection
+            }
+        } catch (error: any) {
+            const errMsg = error.response?.data?.message || 'Gagal menghapus satuan.';
+            showAlert(errMsg);
+        }
+    }
+};
 
 // Search & Filter
 const searchQuery = ref(props.filters.search || '');
@@ -176,6 +370,7 @@ const submitForm = () => {
     prepareData();
 
     if (modalMode.value === 'create') {
+        form.transform((data) => data); // Reset transformer to avoid persistent PUT method spoof
         form.post(route('products.store'), {
             onSuccess: () => closeModal(),
         });
@@ -198,17 +393,9 @@ const deleteProduct = async (id: number) => {
     }
 };
 
-const formatIDR = (value: number) => {
-    return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-        minimumFractionDigits: 0
-    }).format(value);
-};
 
-const formatNumber = (value: number) => {
-    return new Intl.NumberFormat('id-ID').format(value ?? 0);
-};
+
+
 </script>
 
 <template>
@@ -317,15 +504,17 @@ const formatNumber = (value: number) => {
                             <td class="p-4 text-slate-400">
                                 {{ (products.current_page - 1) * 10 + idx + 1 }}
                             </td>
-                            <td class="p-4">
+                            <td class="p-4 align-middle">
                                 <img 
                                     v-if="product.photo" 
                                     :src="product.photo" 
                                     alt="photo" 
-                                    class="w-10 h-10 rounded-full object-cover ring-2 ring-slate-100 dark:ring-slate-850"
+                                    class="w-12 h-12 rounded-xl object-cover border border-border-warm dark:border-slate-800 shadow-sm aspect-square hover:scale-105 transition-transform duration-200"
                                 />
-                                <div v-else class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center font-bold text-xs uppercase">
-                                    {{ product.name.charAt(0) }}
+                                <div v-else class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-slate-800/40 dark:to-slate-900/40 border border-border-warm dark:border-slate-800 text-indigo-500/80 dark:text-indigo-400/80 flex items-center justify-center shadow-inner aspect-square">
+                                    <svg class="h-6 w-6 opacity-75" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                    </svg>
                                 </div>
                             </td>
                             <td class="p-4 font-mono font-semibold text-slate-500 dark:text-slate-455">
@@ -340,8 +529,8 @@ const formatNumber = (value: number) => {
                                     {{ product.category?.name || 'Tanpa Kategori' }}
                                 </span>
                             </td>
-                            <td class="p-4 text-right font-mono">{{ formatIDR(product.purchase_price) }}</td>
-                            <td class="p-4 text-right font-mono">{{ formatIDR(product.sale_price) }}</td>
+                            <td class="p-4 text-right font-mono">{{ formatCurrency(product.purchase_price) }}</td>
+                            <td class="p-4 text-right font-mono">{{ formatCurrency(product.sale_price) }}</td>
                             <td class="p-4 text-right font-semibold">
                                 {{ formatNumber(product.min_stock) }} <span class="text-xs text-slate-450">{{ product.base_unit?.symbol }}</span>
                             </td>
@@ -428,16 +617,19 @@ const formatNumber = (value: number) => {
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <!-- Photo Upload / Preview -->
                         <div class="col-span-1 md:col-span-2 flex items-center space-x-4 p-3 bg-slate-50 dark:bg-slate-950 rounded-xl border border-border-warm dark:border-slate-850">
-                            <div class="relative w-16 h-16 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-550 dark:text-slate-400 overflow-hidden ring-2 ring-indigo-500/20">
-                                <img v-if="photoPreview" :src="photoPreview" class="w-full h-full object-cover" alt="preview" />
-                                <svg v-else class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            <div class="relative w-20 h-20 rounded-xl bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-slate-800 dark:to-slate-900 border border-border-warm dark:border-slate-800 flex items-center justify-center text-indigo-500 dark:text-indigo-400 overflow-hidden shadow-md aspect-square ring-2 ring-indigo-550/10">
+                                <img v-if="photoPreview" :src="photoPreview" class="w-full h-full object-cover aspect-square" alt="preview" />
+                                <svg v-else class="h-8 w-8 opacity-75" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                 </svg>
                             </div>
                             <div class="space-y-1">
                                 <label class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Foto Barang</label>
                                 <input type="file" @change="handlePhotoChange" accept="image/*" class="text-xs text-slate-500 file:mr-4 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 dark:file:bg-slate-800 dark:file:text-slate-350" />
                                 <p class="text-[10px] text-slate-400">Format: JPG, PNG, GIF (Maks. 2MB)</p>
+                                <span v-if="form.errors.photo_file" class="text-xs text-rose-500 block mt-0.5">
+                                    {{ form.errors.photo_file }}
+                                </span>
                             </div>
                         </div>
 
@@ -480,17 +672,40 @@ const formatNumber = (value: number) => {
                             <label for="modal-category" class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                                 Kategori
                             </label>
-                            <select 
-                                id="modal-category"
-                                v-model="form.category_id" 
-                                required
-                                class="w-full rounded-xl border-border-warm dark:border-border-warm bg-surface-warm dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200/50"
-                            >
-                                <option value="">Pilih Kategori</option>
-                                <option v-for="cat in categories" :key="cat.id" :value="cat.id">
-                                    {{ cat.name }}
-                                </option>
-                            </select>
+                            <div class="flex items-center space-x-2">
+                                <select 
+                                    id="modal-category"
+                                    v-model="form.category_id" 
+                                    required
+                                    class="flex-1 rounded-xl border-border-warm dark:border-border-warm bg-surface-warm dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200/50"
+                                >
+                                    <option value="">Pilih Kategori</option>
+                                    <option v-for="cat in localCategories" :key="cat.id" :value="cat.id">
+                                        {{ cat.name }}
+                                    </option>
+                                </select>
+                                <button 
+                                    v-if="form.category_id"
+                                    type="button" 
+                                    @click="deleteQuickCategory"
+                                    class="p-2 rounded-xl bg-rose-50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-950/40 transition-colors focus:outline-none"
+                                    title="Hapus Kategori Terpilih"
+                                >
+                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
+                                <button 
+                                    type="button" 
+                                    @click="openQuickCatModal"
+                                    class="p-2 rounded-xl bg-indigo-50 dark:bg-slate-800 border border-border-warm text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-slate-700 transition-colors focus:outline-none"
+                                    title="Tambah Kategori Baru"
+                                >
+                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
+                                    </svg>
+                                </button>
+                            </div>
                             <span v-if="form.errors.category_id" class="text-xs text-rose-500 mt-1 block">
                                 {{ form.errors.category_id }}
                             </span>
@@ -521,17 +736,40 @@ const formatNumber = (value: number) => {
                             <label for="modal-unit" class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                                 Satuan Dasar (Base Unit)
                             </label>
-                            <select 
-                                id="modal-unit"
-                                v-model="form.base_unit_id" 
-                                required
-                                class="w-full rounded-xl border-border-warm dark:border-border-warm bg-surface-warm dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200/50"
-                            >
-                                <option value="">Pilih Satuan Dasar</option>
-                                <option v-for="u in units" :key="u.id" :value="u.id">
-                                    {{ u.name }} ({{ u.symbol }})
-                                </option>
-                            </select>
+                            <div class="flex items-center space-x-2">
+                                <select 
+                                    id="modal-unit"
+                                    v-model="form.base_unit_id" 
+                                    required
+                                    class="flex-1 rounded-xl border-border-warm dark:border-border-warm bg-surface-warm dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200/50"
+                                >
+                                    <option value="">Pilih Satuan Dasar</option>
+                                    <option v-for="u in localUnits" :key="u.id" :value="u.id">
+                                        {{ u.name }} ({{ u.symbol }})
+                                    </option>
+                                </select>
+                                <button 
+                                    v-if="form.base_unit_id"
+                                    type="button" 
+                                    @click="deleteQuickUnit"
+                                    class="p-2 rounded-xl bg-rose-50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900 text-rose-600 dark:text-rose-450 hover:bg-rose-100 dark:hover:bg-rose-950/40 transition-colors focus:outline-none"
+                                    title="Hapus Satuan Terpilih"
+                                >
+                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
+                                <button 
+                                    type="button" 
+                                    @click="openQuickUnitModal"
+                                    class="p-2 rounded-xl bg-indigo-50 dark:bg-slate-800 border border-border-warm text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-slate-700 transition-colors focus:outline-none"
+                                    title="Tambah Satuan Baru"
+                                >
+                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
+                                    </svg>
+                                </button>
+                            </div>
                             <span v-if="form.errors.base_unit_id" class="text-xs text-rose-500 mt-1 block">
                                 {{ form.errors.base_unit_id }}
                             </span>
@@ -602,7 +840,7 @@ const formatNumber = (value: number) => {
                                 class="w-full rounded-xl border-border-warm dark:border-border-warm bg-surface-warm dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200/50"
                             >
                                 <option value="">Sama dengan Satuan Dasar</option>
-                                <option v-for="u in units" :key="u.id" :value="u.id">
+                                <option v-for="u in localUnits" :key="u.id" :value="u.id">
                                     {{ u.name }} ({{ u.symbol }})
                                 </option>
                             </select>
@@ -619,7 +857,7 @@ const formatNumber = (value: number) => {
                                 class="w-full rounded-xl border-border-warm dark:border-border-warm bg-surface-warm dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200/50"
                             >
                                 <option value="">Sama dengan Satuan Dasar</option>
-                                <option v-for="u in units" :key="u.id" :value="u.id">
+                                <option v-for="u in localUnits" :key="u.id" :value="u.id">
                                     {{ u.name }} ({{ u.symbol }})
                                 </option>
                             </select>
@@ -669,6 +907,132 @@ const formatNumber = (value: number) => {
                             class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-semibold text-sm shadow-sm transition-colors"
                         >
                             {{ form.processing ? 'Menyimpan...' : 'Simpan' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Quick Create Category Modal -->
+        <div v-if="isCatModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" @click="closeQuickCatModal"></div>
+            <div class="bg-surface-warm border border-border-warm rounded-2xl max-w-md w-full shadow-2xl overflow-hidden relative z-50 p-6 space-y-4">
+                <div class="flex items-center justify-between pb-3 border-b border-border-warm">
+                    <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">Tambah Kategori Cepat</h3>
+                    <button @click="closeQuickCatModal" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <form @submit.prevent="submitQuickCategory" class="space-y-4">
+                    <div class="space-y-1">
+                        <label for="quick-cat-name" class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
+                            Nama Kategori
+                        </label>
+                        <input 
+                            id="quick-cat-name"
+                            v-model="quickCatForm.name"
+                            type="text"
+                            required
+                            placeholder="Contoh: Elektronik, Pakaian"
+                            class="w-full rounded-xl border-border-warm dark:border-border-warm bg-surface-warm dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200/50"
+                        />
+                        <span v-if="quickCatForm.errors.name" class="text-xs text-rose-500 block mt-0.5">
+                            {{ quickCatForm.errors.name }}
+                        </span>
+                    </div>
+                    <div class="space-y-1">
+                        <label for="quick-cat-desc" class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
+                            Deskripsi (Opsional)
+                        </label>
+                        <textarea 
+                            id="quick-cat-desc"
+                            v-model="quickCatForm.description"
+                            rows="2"
+                            placeholder="Deskripsi singkat kategori..."
+                            class="w-full rounded-xl border-border-warm dark:border-border-warm bg-surface-warm dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200/50"
+                        ></textarea>
+                    </div>
+                    <div class="flex justify-end space-x-2 pt-2">
+                        <button 
+                            type="button" 
+                            @click="closeQuickCatModal"
+                            class="px-4 py-2 rounded-xl border border-border-warm text-slate-500 dark:text-slate-400 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-850 transition-colors"
+                        >
+                            Batal
+                        </button>
+                        <button 
+                            type="submit"
+                            :disabled="quickCatForm.isSubmitting"
+                            class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-sm font-semibold shadow-sm transition-colors"
+                        >
+                            {{ quickCatForm.isSubmitting ? 'Menyimpan...' : 'Simpan Kategori' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Quick Create Unit Modal -->
+        <div v-if="isUnitModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" @click="closeQuickUnitModal"></div>
+            <div class="bg-surface-warm border border-border-warm rounded-2xl max-w-md w-full shadow-2xl overflow-hidden relative z-50 p-6 space-y-4">
+                <div class="flex items-center justify-between pb-3 border-b border-border-warm">
+                    <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">Tambah Satuan Cepat</h3>
+                    <button @click="closeQuickUnitModal" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <form @submit.prevent="submitQuickUnit" class="space-y-4">
+                    <div class="space-y-1">
+                        <label for="quick-unit-name" class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
+                            Nama Satuan
+                        </label>
+                        <input 
+                            id="quick-unit-name"
+                            v-model="quickUnitForm.name"
+                            type="text"
+                            required
+                            placeholder="Contoh: Pieces, Kilogram"
+                            class="w-full rounded-xl border-border-warm dark:border-border-warm bg-surface-warm dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200/50"
+                        />
+                        <span v-if="quickUnitForm.errors.name" class="text-xs text-rose-500 block mt-0.5">
+                            {{ quickUnitForm.errors.name }}
+                        </span>
+                    </div>
+                    <div class="space-y-1">
+                        <label for="quick-unit-symbol" class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
+                            Simbol
+                        </label>
+                        <input 
+                            id="quick-unit-symbol"
+                            v-model="quickUnitForm.symbol"
+                            type="text"
+                            required
+                            placeholder="Contoh: pcs, kg, box"
+                            class="w-full rounded-xl border-border-warm dark:border-border-warm bg-surface-warm dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200/50"
+                        />
+                        <span v-if="quickUnitForm.errors.symbol" class="text-xs text-rose-500 block mt-0.5">
+                            {{ quickUnitForm.errors.symbol }}
+                        </span>
+                    </div>
+                    <div class="flex justify-end space-x-2 pt-2">
+                        <button 
+                            type="button" 
+                            @click="closeQuickUnitModal"
+                            class="px-4 py-2 rounded-xl border border-border-warm text-slate-500 dark:text-slate-400 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-850 transition-colors"
+                        >
+                            Batal
+                        </button>
+                        <button 
+                            type="submit"
+                            :disabled="quickUnitForm.isSubmitting"
+                            class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-sm font-semibold shadow-sm transition-colors"
+                        >
+                            {{ quickUnitForm.isSubmitting ? 'Menyimpan...' : 'Simpan Satuan' }}
                         </button>
                     </div>
                 </form>

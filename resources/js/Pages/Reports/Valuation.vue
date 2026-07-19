@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { formatNumber, formatCurrency } from '@/utils/format';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
@@ -36,8 +37,8 @@ const applyFilters = () => {
     }, { preserveState: true, replace: true });
 };
 
-const formatNumber   = (n: number) => new Intl.NumberFormat('id-ID').format(n ?? 0);
-const formatCurrency = (n: number) => 'Rp ' + new Intl.NumberFormat('id-ID').format(Math.round(n ?? 0));
+
+
 
 // percentage of total for progress bar
 const pct = (v: number) => props.totalValue > 0 ? Math.min((v / props.totalValue) * 100, 100) : 0;

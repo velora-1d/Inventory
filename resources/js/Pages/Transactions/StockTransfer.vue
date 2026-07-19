@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { formatNumber, formatCurrency } from '@/utils/format';
 import { showConfirm } from '@/confirm';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
@@ -16,7 +17,7 @@ interface Transfer {
     id: number; transaction_no: string; transaction_date: string;
     reference_no: string | null; notes: string | null; status: 'draft' | 'completed';
     items_count: number;
-    fromWarehouse: Warehouse; toWarehouse: Warehouse; creator: { name: string };
+    from_warehouse: Warehouse; to_warehouse: Warehouse; creator: { name: string };
 }
 interface Pagination<T> { data: T[]; current_page: number; last_page: number; per_page: number; total: number; links: { url: string | null; label: string; active: boolean }[]; }
 
@@ -166,6 +167,8 @@ const viewDetail = async (t: Transfer) => {
     try {
         const res = await fetch(`/stock-transfers/${t.id}`, { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' } });
         const data = await res.json();
+        // Update detailData dengan data lengkap dari API (termasuk relasi fromWarehouse/toWarehouse)
+        detailData.value = { ...t, ...data };
         detailItems.value = data.items ?? [];
     } finally { isLoadingDetail.value = false; }
 };
@@ -185,7 +188,7 @@ const deleteTransaction = async (id: number) => {
     router.delete(route('stock-transfers.destroy', id));
 };
 
-const formatNumber = (n: number) => new Intl.NumberFormat('id-ID').format(n ?? 0);
+
 const statusBadge = (s: string) => s === 'completed'
     ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300'
     : 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300';
@@ -266,15 +269,15 @@ const statusBadge = (s: string) => s === 'completed'
                                     {{ new Date(t.transaction_date).toLocaleDateString('id-ID', { day:'2-digit', month:'short', year:'numeric' }) }}
                                 </td>
                                 <td class="px-4 py-3">
-                                    <div class="font-medium text-gray-800 dark:text-gray-200">{{ t.fromWarehouse?.name || 'Tidak Ada' }}</div>
-                                    <div class="text-xs text-gray-400">{{ t.fromWarehouse?.code || '' }}</div>
+                                    <div class="font-medium text-gray-800 dark:text-gray-200">{{ t.from_warehouse?.name || 'Tidak Ada' }}</div>
+                                    <div class="text-xs text-gray-400">{{ t.from_warehouse?.code || '' }}</div>
                                 </td>
                                 <td class="px-4 py-3">
                                     <div class="flex items-center gap-2">
                                         <svg class="w-3.5 h-3.5 text-orange-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                                         <div>
-                                            <div class="font-medium text-gray-800 dark:text-gray-200">{{ t.toWarehouse?.name || 'Tidak Ada' }}</div>
-                                            <div class="text-xs text-gray-400">{{ t.toWarehouse?.code || '' }}</div>
+                                            <div class="font-medium text-gray-800 dark:text-gray-200">{{ t.to_warehouse?.name || 'Tidak Ada' }}</div>
+                                            <div class="text-xs text-gray-400">{{ t.to_warehouse?.code || '' }}</div>
                                         </div>
                                     </div>
                                 </td>
@@ -352,33 +355,38 @@ const statusBadge = (s: string) => s === 'completed'
                             <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1.5">Tanggal <span class="text-red-500">*</span></label>
                             <input v-model="form.transaction_date" type="date"
                                 class="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500"/>
+                            <p v-if="formErrors.transaction_date" class="text-red-500 text-xs mt-1">{{ formErrors.transaction_date }}</p>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1.5">Dari Gudang <span class="text-red-500">*</span></label>
                             <select v-model="form.from_warehouse_id" @change="onFromWarehouseChange"
-                                :class="['w-full px-3 py-2 text-sm rounded-xl border focus:outline-none focus:ring-2 focus:ring-violet-500', sameWarehouseError ? 'border-red-400 bg-red-50 dark:bg-red-900/20' : 'border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200']">
+                                :class="['w-full px-3 py-2 text-sm rounded-xl border focus:outline-none focus:ring-2 focus:ring-violet-500', sameWarehouseError || formErrors.from_warehouse_id ? 'border-red-400 bg-red-50 dark:bg-red-900/20' : 'border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200']">
                                 <option value="">-- Pilih Gudang Asal --</option>
                                 <option v-for="w in warehouses" :key="w.id" :value="w.id">{{ w.name }}</option>
                             </select>
+                            <p v-if="formErrors.from_warehouse_id" class="text-red-500 text-xs mt-1">{{ formErrors.from_warehouse_id }}</p>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1.5">Ke Gudang <span class="text-red-500">*</span></label>
                             <select v-model="form.to_warehouse_id"
-                                :class="['w-full px-3 py-2 text-sm rounded-xl border focus:outline-none focus:ring-2 focus:ring-violet-500', sameWarehouseError ? 'border-red-400 bg-red-50 dark:bg-red-900/20' : 'border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200']">
+                                :class="['w-full px-3 py-2 text-sm rounded-xl border focus:outline-none focus:ring-2 focus:ring-violet-500', sameWarehouseError || formErrors.to_warehouse_id ? 'border-red-400 bg-red-50 dark:bg-red-900/20' : 'border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200']">
                                 <option value="">-- Pilih Gudang Tujuan --</option>
                                 <option v-for="w in warehouses" :key="w.id" :value="w.id"
                                     :disabled="w.id === Number(form.from_warehouse_id)">{{ w.name }}</option>
                             </select>
+                            <p v-if="formErrors.to_warehouse_id" class="text-red-500 text-xs mt-1">{{ formErrors.to_warehouse_id }}</p>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1.5">No. Referensi</label>
                             <input v-model="form.reference_no" type="text" placeholder="Opsional"
                                 class="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500"/>
+                            <p v-if="formErrors.reference_no" class="text-red-500 text-xs mt-1">{{ formErrors.reference_no }}</p>
                         </div>
                         <div class="sm:col-span-2">
                             <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1.5">Catatan</label>
                             <input v-model="form.notes" type="text" placeholder="Catatan tambahan (opsional)"
                                 class="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500"/>
+                            <p v-if="formErrors.notes" class="text-red-500 text-xs mt-1">{{ formErrors.notes }}</p>
                         </div>
                     </div>
 
@@ -416,6 +424,9 @@ const statusBadge = (s: string) => s === 'completed'
                                                 <option value="">-- Pilih Barang --</option>
                                                 <option v-for="p in products" :key="p.id" :value="p.id">{{ p.sku }} — {{ p.name }}</option>
                                             </select>
+                                            <span v-if="formErrors['items.' + idx + '.product_id']" class="text-red-500 text-[10px] block mt-0.5">
+                                                Barang wajib diisi.
+                                            </span>
                                         </td>
                                         <td class="px-2 py-2">
                                             <select v-model="item.unit_id"
@@ -423,10 +434,16 @@ const statusBadge = (s: string) => s === 'completed'
                                                 <option value="">Satuan</option>
                                                 <option v-for="u in units" :key="u.id" :value="u.id">{{ u.symbol }}</option>
                                             </select>
+                                            <span v-if="formErrors['items.' + idx + '.unit_id']" class="text-red-500 text-[10px] block mt-0.5">
+                                                Satuan wajib diisi.
+                                            </span>
                                         </td>
                                         <td class="px-2 py-2">
                                             <input v-model.number="item.qty" type="number" min="0.01" step="0.01"
-                                                :class="['w-full px-2 py-1.5 text-xs text-right rounded-lg border focus:outline-none focus:ring-2', stockWarning(idx) ? 'border-amber-400 focus:ring-amber-400 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300' : 'border-gray-200 dark:border-gray-600 bg-surface-warm dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:ring-violet-500']"/>
+                                                :class="['w-full px-2 py-1.5 text-xs text-right rounded-lg border focus:outline-none focus:ring-2', stockWarning(idx) || formErrors['items.' + idx + '.qty'] ? 'border-red-400 focus:ring-red-400 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300' : 'border-gray-200 dark:border-gray-600 bg-surface-warm dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:ring-violet-500']"/>
+                                            <span v-if="formErrors['items.' + idx + '.qty']" class="text-red-500 text-[10px] block mt-0.5">
+                                                Jumlah wajib diisi / tidak valid.
+                                            </span>
                                             <div v-if="item.product_id" class="text-right mt-0.5">
                                                 <span :class="['text-xs', stockWarning(idx) ? 'text-amber-500 font-semibold' : 'text-gray-400']">
                                                     Tersedia: {{ item.availableStock }}
@@ -480,16 +497,16 @@ const statusBadge = (s: string) => s === 'completed'
                     <div class="flex items-center gap-3 bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-xl p-4">
                         <div class="flex-1 text-center">
                             <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Dari</p>
-                            <p class="font-bold text-gray-800 dark:text-gray-200">{{ detailData.fromWarehouse?.name || 'Tidak Ada' }}</p>
-                            <p class="text-xs text-gray-400 font-mono">{{ detailData.fromWarehouse?.code || '' }}</p>
+                            <p class="font-bold text-gray-800 dark:text-gray-200">{{ detailData.from_warehouse?.name || 'Tidak Ada' }}</p>
+                            <p class="text-xs text-gray-400 font-mono">{{ detailData.from_warehouse?.code || '' }}</p>
                         </div>
                         <div class="flex items-center justify-center w-10 h-10 bg-orange-600 rounded-full flex-shrink-0">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                         </div>
                         <div class="flex-1 text-center">
                             <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Ke</p>
-                            <p class="font-bold text-gray-800 dark:text-gray-200">{{ detailData.toWarehouse?.name || 'Tidak Ada' }}</p>
-                            <p class="text-xs text-gray-400 font-mono">{{ detailData.toWarehouse?.code || '' }}</p>
+                            <p class="font-bold text-gray-800 dark:text-gray-200">{{ detailData.to_warehouse?.name || 'Tidak Ada' }}</p>
+                            <p class="text-xs text-gray-400 font-mono">{{ detailData.to_warehouse?.code || '' }}</p>
                         </div>
                     </div>
 
