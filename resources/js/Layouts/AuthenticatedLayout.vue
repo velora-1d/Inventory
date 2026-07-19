@@ -353,6 +353,19 @@ const menuGroups = [
 
             <!-- Page Content -->
             <main class="flex-1 overflow-y-auto p-3 sm:p-4 lg:p-5 custom-scrollbar">
+                <!-- Print Only Header -->
+                <div class="hidden print:block mb-6 border-b-2 border-slate-850 pb-4">
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <h1 class="text-xl font-bold tracking-tight text-slate-900 uppercase">Velora Inventory</h1>
+                            <p class="text-[11px] text-slate-500">Sistem Manajemen Inventaris & Laporan Digital &bull; Laporan Resmi</p>
+                        </div>
+                        <div class="text-right text-[10px] text-slate-500 font-mono">
+                            <p>Tanggal: {{ new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }) }}</p>
+                            <p>Operator: {{ user.name }}</p>
+                        </div>
+                    </div>
+                </div>
                 <slot />
             </main>
         </div>
