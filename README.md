@@ -142,3 +142,10 @@ Untuk membersihkan seluruh container beserta volume datanya:
 ```bash
 docker-compose down -v
 ```
+
+---
+
+## 👥 Developer & Kontributor
+Sistem ini dikembangkan dan dikelola oleh:
+* **Mahin Utsman Nawawi, S.H** (Lead Developer)
+
